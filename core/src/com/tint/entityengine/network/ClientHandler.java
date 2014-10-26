@@ -1,7 +1,10 @@
 package com.tint.entityengine.network;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.badlogic.ashley.core.Entity;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.JsonSerialization;
@@ -11,13 +14,15 @@ import com.tint.entityengine.network.packets.Packet;
 
 public class ClientHandler {
 	private Client client;
+	private Map<Long, Entity> serverIds = new HashMap<Long, Entity>();
 	
 	private PacketProcessor processor;
 
 	public ClientHandler(GameState gs) {
 		processor = new PacketProcessor(gs);
 		
-		client = new Client(8192, 2048, new JsonSerialization());
+		client = new Client();
+		Packet.register(client.getKryo());
 		client.start();
 
 		try {
@@ -40,7 +45,15 @@ public class ClientHandler {
 		});
 	}
 	
+	public void entityAdded(long serverId, Entity e) {
+		serverIds.put(serverId, e);
+	}
+	
 	public void processPackets() {
 		processor.update();
+	}
+
+	public Map<Long, Entity> getServerIdMap() {
+		return serverIds;
 	}
 }

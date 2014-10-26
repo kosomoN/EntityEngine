@@ -19,10 +19,6 @@ public class UpdatePacket extends Packet {
 		changedEntities.clear();
 	}
 
-	public ArrayList<EntityUpdate> getEntities() {
-		return changedEntities;
-	}
-	
 	public static class EntityUpdate {
 		private ArrayList<Networked> changedComponents = new ArrayList<Networked>();
 		private long id;

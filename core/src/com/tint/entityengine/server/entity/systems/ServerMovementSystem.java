@@ -21,6 +21,6 @@ public class ServerMovementSystem extends IteratingSystem {
 	protected void processEntity(Entity entity, float deltaTime) {
 		PositionComponent p = pm.get(entity);
 		p.updateOld();
-		p.set((float) Math.cos(gameServer.getTicks() / 10.0) * 400 + 600, (float) Math.sin(gameServer.getTicks() / 10.0) * 400 + 400);
+		p.set((float) Math.cos(gameServer.getTicks() / 10.0 + entity.getId()) * 400 + 600, (float) Math.sin(gameServer.getTicks() / 10.0 + entity.getId()) * 400 + 400);
 	}
 }

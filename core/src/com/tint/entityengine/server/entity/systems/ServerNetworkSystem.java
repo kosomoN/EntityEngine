@@ -29,10 +29,12 @@ public class ServerNetworkSystem extends IteratingSystem {
 		updatePacket.clear();
 		super.update(deltaTime);
 		
-		//Don't log updatePackets
-		server.jsonSerialization.setLogging(false, true);
-		server.getServer().sendToAllUDP(updatePacket);
-		server.jsonSerialization.setLogging(true, true);
+		if(!updatePacket.getEntityUpdates().isEmpty()) {
+			//Don't log updatePackets
+			server.jsonSerialization.setLogging(false, true);
+			server.getServer().sendToAllUDP(updatePacket);
+			//server.jsonSerialization.setLogging(true, true);
+		}
 	}
 
 	@Override

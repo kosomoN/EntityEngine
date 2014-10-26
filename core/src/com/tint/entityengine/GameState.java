@@ -1,13 +1,9 @@
 package com.tint.entityengine;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.systems.RenderingSystem;
 import com.tint.entityengine.network.ClientHandler;
 import com.tint.entityengine.states.State;
@@ -18,7 +14,6 @@ public class GameState extends State {
 	
 	private ClientHandler client;
     private Engine engine;
-    private Map<Long, Entity> entities = new HashMap<Long, Entity>();
     private RenderingSystem renderSystem;
     private float accumulatedTicks;
 	private int ticks;
@@ -32,17 +27,8 @@ public class GameState extends State {
         renderSystem = new RenderingSystem(engine);
 
 	    client = new ClientHandler(this);
-
-        e = new Entity();
-        e.add(new PositionComponent());
-        engine.addEntity(e);
-        addEntity(e, 1);
     }
 
-    public void addEntity(Entity e, long id) {
-    	entities.put(id, e);
-    }
-    
     @Override
     public void render(float delta) {
 		accumulatedTicks += delta / TICK_LENGTH;
@@ -62,8 +48,8 @@ public class GameState extends State {
     public Engine getEngine() {
     	return engine;
     }
-    
-    public Map<Long, Entity> getEntities() {
-    	return entities;
-    }
+
+	public ClientHandler getClientHandler() {
+		return client;
+	}
 }

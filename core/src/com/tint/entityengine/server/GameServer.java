@@ -2,11 +2,15 @@ package com.tint.entityengine.server;
 
 import java.io.IOException;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.esotericsoftware.kryonet.JsonSerialization;
 import com.esotericsoftware.kryonet.Server;
 import com.tint.entityengine.entity.components.PositionComponent;
+import com.tint.entityengine.network.packets.CreateEntityPacket;
+import com.tint.entityengine.network.packets.Packet;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
 import com.tint.entityengine.server.entity.systems.ServerMovementSystem;
 import com.tint.entityengine.server.entity.systems.ServerNetworkSystem;
@@ -29,7 +33,8 @@ public class GameServer {
 		engine.addSystem(new ServerNetworkSystem(this));
 
 		jsonSerialization = new JsonSerialization();
-		server = new Server(16384, 2048, jsonSerialization);
+		server = new Server();
+		Packet.register(server.getKryo());
 		server.start();
 		try {
 			server.bind(54333, 54334);
@@ -39,11 +44,6 @@ public class GameServer {
 		}
 
 		server.addListener(new ServerListener(this));
-
-		Entity e = new Entity();
-		e.add(new PositionComponent());
-		e.add(new NetworkComponent());
-		engine.addEntity(e);
 	}
 
 	private long lastTickTime;
@@ -53,6 +53,21 @@ public class GameServer {
 		while(running) {
 			if (System.nanoTime() - lastTickTime >= TICK_LENGTH) {
 				lastTickTime = System.nanoTime();
+				if(ticks % 60 == 0) {
+					Entity ent = new Entity();
+					ent.add(new PositionComponent());
+					ent.add(new NetworkComponent());
+					engine.addEntity(ent);
+					
+					CreateEntityPacket cep = new CreateEntityPacket(ent.getId());
+					
+					ImmutableArray<Component> components = ent.getComponents();
+					for(int i = 0; i < components.size(); i++) {
+						cep.addComponent(components.get(i));
+					}
+					
+					server.sendToAllTCP(cep);
+				}
 
 				engine.update(TICK_LENGTH);
 
@@ -67,5 +82,9 @@ public class GameServer {
 
 	public int getTicks() {
 		return ticks;
+	}
+
+	public Engine getEngine() {
+		return engine;
 	}
 }
