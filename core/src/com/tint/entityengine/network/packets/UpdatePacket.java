@@ -18,6 +18,10 @@ public class UpdatePacket extends Packet {
 	public void clear() {
 		changedEntities.clear();
 	}
+
+	public ArrayList<EntityUpdate> getEntities() {
+		return changedEntities;
+	}
 	
 	public static class EntityUpdate {
 		private ArrayList<Networked> changedComponents = new ArrayList<Networked>();
@@ -26,7 +30,6 @@ public class UpdatePacket extends Packet {
 		public EntityUpdate(long id) {
 			this.id = id;
 		}
-
 		
 		//Required by de-serialization
 		@SuppressWarnings("unused")
@@ -35,10 +38,17 @@ public class UpdatePacket extends Packet {
 		public void addComponent(Networked component) {
 			changedComponents.add(component);
 		}
-
-
+		
+		public void setID(long id) {
+			this.id = id;
+		}
+		
 		public ArrayList<Networked> getComponents() {
 			return changedComponents;
+		}
+		
+		public long getID() {
+			return id;
 		}
 	}
 }

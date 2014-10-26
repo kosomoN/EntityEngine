@@ -40,7 +40,6 @@ public class GameServer {
 
 		server.addListener(new ServerListener(this));
 
-
 		Entity e = new Entity();
 		e.add(new PositionComponent());
 		e.add(new NetworkComponent());
