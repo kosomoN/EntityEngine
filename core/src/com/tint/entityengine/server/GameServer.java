@@ -4,13 +4,12 @@ import java.io.IOException;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.JsonSerialization;
-import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.tint.entityengine.entity.components.PositionComponent;
-import com.tint.entityengine.network.packets.UpdatePacket;
+import com.tint.entityengine.server.entity.components.NetworkComponent;
 import com.tint.entityengine.server.entity.systems.ServerMovementSystem;
+import com.tint.entityengine.server.entity.systems.ServerNetworkSystem;
 
 public class GameServer {
 
@@ -20,12 +19,17 @@ public class GameServer {
 	private Engine engine;
 
 	private boolean running = true;
+	
+	//Used while developing, will be changed to kryo
+	public JsonSerialization jsonSerialization;
 
 	public GameServer() {
 		engine = new Engine();
-		engine.addSystem(new ServerMovementSystem());
+		engine.addSystem(new ServerMovementSystem(this));
+		engine.addSystem(new ServerNetworkSystem(this));
 
-		server = new Server(16384, 2048, new JsonSerialization());
+		jsonSerialization = new JsonSerialization();
+		server = new Server(16384, 2048, jsonSerialization);
 		server.start();
 		try {
 			server.bind(54333, 54334);
@@ -34,19 +38,12 @@ public class GameServer {
 			e.printStackTrace();
 		}
 
-		server.addListener(new Listener() {
-			@Override
-			public void connected(Connection connection) {
-				super.connected(connection);
-				UpdatePacket p = new UpdatePacket();
-				p.hello = "Hello World!";
-				server.sendToAllTCP(p);
-			}
-		});
+		server.addListener(new ServerListener(this));
 
 
 		Entity e = new Entity();
 		e.add(new PositionComponent());
+		e.add(new NetworkComponent());
 		engine.addEntity(e);
 	}
 
@@ -64,5 +61,12 @@ public class GameServer {
 			}
 		}
 	}
+	
+	public Server getServer() {
+		return server;
+	}
 
+	public int getTicks() {
+		return ticks;
+	}
 }

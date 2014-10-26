@@ -1,10 +1,11 @@
 package com.tint.entityengine.entity.components;
 
 import com.badlogic.ashley.core.Component;
+import com.tint.entityengine.server.entity.components.Networked;
 
-public class PositionComponent extends Component {
+public class PositionComponent extends Component implements Networked {
     private float x, y;
-    private float lastTickX, lastTickY;
+    private transient float lastTickX, lastTickY;
 
     public float getX() {
         return x;
@@ -30,5 +31,15 @@ public class PositionComponent extends Component {
 	public void set(float x, float y) {
 		this.x = x;
 		this.y = y;
+	}
+
+	@Override
+	public boolean hasChanged() {
+		return true; //TODO Not added for testing
+	}
+
+	public void set(PositionComponent positionComponent) {
+		this.x = positionComponent.x;
+		this.y = positionComponent.y;
 	}
 }

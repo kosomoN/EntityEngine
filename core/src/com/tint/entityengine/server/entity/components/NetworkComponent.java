@@ -1,7 +1,7 @@
 package com.tint.entityengine.server.entity.components;
 
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.ashley.core.Component;
 
-public class NetworkComponent {
-	private Array<Networked> networkedComponents;
+public class NetworkComponent extends Component {
+
 }

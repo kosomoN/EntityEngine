@@ -5,22 +5,40 @@ import java.util.ArrayList;
 import com.tint.entityengine.server.entity.components.Networked;
 
 public class UpdatePacket extends Packet {
-	private ArrayList<EntityUpdate> changedEntities;
+	private ArrayList<EntityUpdate> changedEntities = new ArrayList<UpdatePacket.EntityUpdate>();
 	
-	public void addComponent(EntityUpdate entityUpdate) {
+	public void addEntityUpdate(EntityUpdate entityUpdate) {
 		changedEntities.add(entityUpdate);
+	}
+	
+	public ArrayList<EntityUpdate> getEntityUpdates() {
+		return changedEntities;
 	}
 	
 	public void clear() {
 		changedEntities.clear();
 	}
 	
-	public class EntityUpdate {
-		private ArrayList<Networked> changedComponents;
+	public static class EntityUpdate {
+		private ArrayList<Networked> changedComponents = new ArrayList<Networked>();
 		private long id;
+		
+		public EntityUpdate(long id) {
+			this.id = id;
+		}
+
+		
+		//Required by de-serialization
+		@SuppressWarnings("unused")
+		private EntityUpdate() {}
 		
 		public void addComponent(Networked component) {
 			changedComponents.add(component);
+		}
+
+
+		public ArrayList<Networked> getComponents() {
+			return changedComponents;
 		}
 	}
 }
