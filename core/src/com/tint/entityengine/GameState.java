@@ -8,7 +8,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.tint.entityengine.entity.components.PositionComponent;
-import com.tint.entityengine.entity.systems.MovementSystem;
 import com.tint.entityengine.entity.systems.RenderingSystem;
 import com.tint.entityengine.network.ClientHandler;
 import com.tint.entityengine.states.State;
@@ -37,6 +36,7 @@ public class GameState extends State {
         e = new Entity();
         e.add(new PositionComponent());
         engine.addEntity(e);
+        addEntity(e, 1);
     }
 
     public void addEntity(Entity e, long id) {
@@ -48,6 +48,7 @@ public class GameState extends State {
 		accumulatedTicks += delta / TICK_LENGTH;
 		
 		while (accumulatedTicks >= 1) {
+			client.processPackets();
 			engine.update(TICK_LENGTH);
 			
 			accumulatedTicks--;

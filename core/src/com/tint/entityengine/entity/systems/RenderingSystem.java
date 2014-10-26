@@ -24,7 +24,7 @@ public class RenderingSystem  {
         for (int i = 0; i < entities.size(); ++i) {
             Entity entity = entities.get(i);
             PositionComponent pos = Mappers.position.get(entity);
-            shapeRenderer.rect(pos.getLerpX(1) - 10, pos.getLerpY(1) - 10, 20, 20);
+            shapeRenderer.rect(pos.getLerpX(frameTime) - 10, pos.getLerpY(frameTime) - 10, 20, 20);
         }
 
         shapeRenderer.end();

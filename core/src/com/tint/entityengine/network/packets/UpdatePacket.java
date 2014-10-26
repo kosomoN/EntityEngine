@@ -39,10 +39,6 @@ public class UpdatePacket extends Packet {
 			changedComponents.add(component);
 		}
 		
-		public void setID(long id) {
-			this.id = id;
-		}
-		
 		public ArrayList<Networked> getComponents() {
 			return changedComponents;
 		}
