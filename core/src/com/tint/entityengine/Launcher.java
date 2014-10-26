@@ -1,27 +1,40 @@
 package com.tint.entityengine;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import java.util.EnumMap;
+import java.util.Map;
 
-public class Launcher extends ApplicationAdapter {
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.tint.entityengine.states.GameState;
+import com.tint.entityengine.states.State;
+
+public class Launcher extends Game {
+	
+	public enum States { GAMESTATE };
+	
+	Map<States, State> states = new EnumMap<States, State>(States.class);
+	
 	SpriteBatch batch;
-	Texture img;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		
+		load();
+		enterState(States.GAMESTATE);
+		
 	}
-
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+	
+	public void load() {
+		// Loading states
+		states.put(States.GAMESTATE, new GameState(this));
+	}
+	
+	public void enterState(States state) {
+		State s = states.get(state);
+		if(s != null)
+			setScreen(s);
+		else
+			throw new RuntimeException("No state assigned to this enum: " + state);
 	}
 }
