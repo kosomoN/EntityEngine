@@ -3,14 +3,12 @@ package com.tint.entityengine.network;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.tint.entityengine.GameState;
 import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.network.packets.UpdatePacket;
 import com.tint.entityengine.network.packets.UpdatePacket.EntityUpdate;
-import com.tint.entityengine.server.entity.components.Networked;
 
 public class PacketProcessor {
 
@@ -32,6 +30,7 @@ public class PacketProcessor {
 			for(EntityUpdate eu : up.getEntities()) {
 				ent = entities.get(eu.getID());
 				PositionComponent pos = Mappers.position.get(ent);
+				ent.getComponent(PositionComponent.class).set(pos);
 			}
 		}
 	}
