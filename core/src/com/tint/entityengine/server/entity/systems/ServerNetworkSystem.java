@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.esotericsoftware.minlog.Log;
 import com.tint.entityengine.network.packets.UpdatePacket;
 import com.tint.entityengine.network.packets.UpdatePacket.EntityUpdate;
 import com.tint.entityengine.server.GameServer;
@@ -38,7 +37,7 @@ public class ServerNetworkSystem extends IteratingSystem {
 	}
 
 	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	protected void processEntity(Entity entity, float delta) {
 		ImmutableArray<Component> components = entity.getComponents();
 		EntityUpdate eu = null;
 		for(int i = 0; i < components.size(); i++) {
@@ -48,6 +47,7 @@ public class ServerNetworkSystem extends IteratingSystem {
 				Networked n = (Networked) c;
 				
 				if(n.hasChanged()) {
+					n.resetChanged();
 					if(eu == null) {
 						eu = new EntityUpdate(entity.getId());
 						updatePacket.addEntityUpdate(eu);

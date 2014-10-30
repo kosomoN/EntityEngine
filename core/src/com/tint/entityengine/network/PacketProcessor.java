@@ -24,7 +24,7 @@ public class PacketProcessor {
 		this.gs = gs;
 	}
 	
-	public void addUpdatePacket(Packet packet) {
+	public void addPacket(Packet packet) {
 		packets.add(packet);
 	}
 	

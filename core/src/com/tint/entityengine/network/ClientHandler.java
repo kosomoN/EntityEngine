@@ -7,7 +7,6 @@ import java.util.Map;
 import com.badlogic.ashley.core.Entity;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.JsonSerialization;
 import com.esotericsoftware.kryonet.Listener;
 import com.tint.entityengine.GameState;
 import com.tint.entityengine.network.packets.Packet;
@@ -31,12 +30,13 @@ public class ClientHandler {
 			e.printStackTrace();
 		}
 		
+		//client.addListener(new Listener.LagListener(200, 200, new Listener() {
 		client.addListener(new Listener() {
 			@Override
 			public void received(Connection connection, Object object) {
 				super.received(connection, object);
 				if(object instanceof Packet) {
-					processor.addUpdatePacket((Packet) object);
+					processor.addPacket((Packet) object);
 					return;
 				}
 				
@@ -55,5 +55,9 @@ public class ClientHandler {
 
 	public Map<Long, Entity> getServerIdMap() {
 		return serverIds;
+	}
+	
+	public Client getClient() {
+		return client;
 	}
 }

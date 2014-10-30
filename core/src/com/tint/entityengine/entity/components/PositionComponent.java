@@ -6,6 +6,7 @@ import com.tint.entityengine.server.entity.components.Networked;
 public class PositionComponent extends Component implements Networked {
     private float x, y;
     private transient float lastTickX, lastTickY;
+	private transient boolean hasChanged = true;
 
     public float getX() {
         return x;
@@ -16,11 +17,11 @@ public class PositionComponent extends Component implements Networked {
     }
 
     public float getLerpX(float t) {
-        return lastTickX + t * (x - lastTickX);
+        return lastTickX;// + t * (x - lastTickX);
     }
 
     public float getLerpY(float t) {
-        return lastTickY + t * (y - lastTickY);
+        return lastTickY;// + t * (y - lastTickY);
     }
 
     public void updateOld() {
@@ -31,15 +32,21 @@ public class PositionComponent extends Component implements Networked {
 	public void set(float x, float y) {
 		this.x = x;
 		this.y = y;
+		
+		hasChanged = true;
 	}
 
 	@Override
 	public boolean hasChanged() {
-		return true; //TODO Not added for testing
+		return hasChanged;
 	}
 
 	public void set(PositionComponent positionComponent) {
-		this.x = positionComponent.x;
-		this.y = positionComponent.y;
+		set(positionComponent.x, positionComponent.y);
+	}
+
+	@Override
+	public void resetChanged() {
+		this.hasChanged = false;
 	}
 }
