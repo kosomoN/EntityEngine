@@ -13,6 +13,9 @@ import com.tint.entityengine.server.entity.components.Networked;
 
 public class ServerNetworkSystem extends IteratingSystem {
 
+	private int updateRate = 1;
+	
+	private int ticksSinceUpdate = 0;
 	private UpdatePacket updatePacket;
 	private GameServer server;
 	
@@ -25,15 +28,22 @@ public class ServerNetworkSystem extends IteratingSystem {
 	
 	@Override
 	public void update(float deltaTime) {
-		updatePacket.clear();
-		super.update(deltaTime);
-		
-		if(!updatePacket.getEntityUpdates().isEmpty()) {
-			//Don't log updatePackets
-			server.jsonSerialization.setLogging(false, true);
-			server.getServer().sendToAllUDP(updatePacket);
-			//server.jsonSerialization.setLogging(true, true);
+		if(ticksSinceUpdate >= updateRate) {
+			ticksSinceUpdate = 0;
+			
+			updatePacket.clear();
+			super.update(deltaTime);
+			
+			if(!updatePacket.getEntityUpdates().isEmpty()) {
+				//Don't log updatePackets
+				server.jsonSerialization.setLogging(false, true);
+				updatePacket.tick = server.getTicks();
+				server.sendToAllConnectedUDP(updatePacket);
+				//server.jsonSerialization.setLogging(true, true);
+			}
 		}
+		
+		ticksSinceUpdate++;
 	}
 
 	@Override

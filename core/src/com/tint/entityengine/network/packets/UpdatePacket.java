@@ -6,6 +6,7 @@ import com.tint.entityengine.server.entity.components.Networked;
 
 public class UpdatePacket extends Packet {
 	private ArrayList<EntityUpdate> changedEntities = new ArrayList<UpdatePacket.EntityUpdate>();
+	public int tick;
 	
 	public void addEntityUpdate(EntityUpdate entityUpdate) {
 		changedEntities.add(entityUpdate);

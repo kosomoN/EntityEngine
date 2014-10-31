@@ -13,6 +13,7 @@ public abstract class Packet {
 		kryo.register(UpdatePacket.class);
 		kryo.register(UpdatePacket.EntityUpdate.class);
 		kryo.register(CreateEntityPacket.class);
+		kryo.register(RemoveEntityPacket.class);
 		kryo.register(InputPacket.class);
 		
 		kryo.register(PositionComponent.class);

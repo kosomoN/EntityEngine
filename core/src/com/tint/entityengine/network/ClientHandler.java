@@ -30,8 +30,8 @@ public class ClientHandler {
 			e.printStackTrace();
 		}
 		
-		//client.addListener(new Listener.LagListener(200, 200, new Listener() {
-		client.addListener(new Listener() {
+		client.addListener(new Listener.LagListener(60, 60, new Listener() {
+		//client.addListener(new Listener() {
 			@Override
 			public void received(Connection connection, Object object) {
 				super.received(connection, object);
@@ -42,7 +42,7 @@ public class ClientHandler {
 				
 				System.out.println("Unrecognized packet: " + object);
 			}
-		});
+		}));
 	}
 	
 	public void entityAdded(long serverId, Entity e) {

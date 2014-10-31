@@ -52,7 +52,7 @@ public class ServerPlayerSystem extends IteratingSystem {
 		
 		//TODO Check if new position is valid
 		
-		pos.set(newX, newY);
+		pos.set(newX, newY, gameServer.getTicks());
 	}
 
 }

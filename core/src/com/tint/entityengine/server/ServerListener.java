@@ -37,24 +37,16 @@ public class ServerListener extends Listener {
 	public void connected(Connection connection) {
 		super.connected(connection);
 		
-		ImmutableArray<Entity> enitites = gameServer.getEngine().getEntitiesFor(Family.getFor(NetworkComponent.class));
-		
-		for(int i = 0; i < enitites.size(); i++) {
-			Entity e = enitites.get(i);
-			
-			CreateEntityPacket cep = new CreateEntityPacket(e.getId());
-			
-			ImmutableArray<Component> components = e.getComponents();
-			for(int j = 0; j < components.size(); j++) {
-				Component comp =  components.get(j);
-				if(!(comp instanceof ServerPlayerComponent))
-					cep.addComponent(components.get(j));
-			}
-			
-			connection.sendTCP(cep);
-		}
+		gameServer.addClient(new ServerClient(connection, gameServer));
 	}
 	
+	@Override
+	public void disconnected(Connection connection) {
+		super.disconnected(connection);
+		
+		gameServer.removeClient(connection);
+	}
+
 	public void processPackets() {
 		packetProcessor.update();
 	}

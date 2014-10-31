@@ -24,7 +24,13 @@ public class ServerPacketProcessor {
 		while((p = packets.poll()) != null) {
 			if(p instanceof InputPacket) {
 				InputPacket inputPacket = (InputPacket) p;
-				gameServer.spc.inputState = inputPacket.keyBits;
+				synchronized (gameServer.getClients()) {
+					for(ServerClient client : gameServer.getClients()) {
+						if(client.getID() == p.senderId) {
+							client.getPlayerComponent().inputState = inputPacket.keyBits;
+						}
+					}
+				}
 			}
 		}
 	}

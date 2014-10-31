@@ -42,7 +42,7 @@ public class GameState extends State {
 		}
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		renderSystem.render(accumulatedTicks);
+		renderSystem.render(ticks + accumulatedTicks);
 	}
 
     @Override
@@ -58,5 +58,9 @@ public class GameState extends State {
 
 	public ClientHandler getClientHandler() {
 		return client;
+	}
+
+	public int getTick() {
+		return ticks;
 	}
 }
