@@ -60,4 +60,9 @@ public class InputProcessor extends InputAdapter {
 			gs.getClientHandler().getClient().sendTCP(inputPacket);
 		}
 	}
+	
+	public boolean getKey(byte key) {
+		//AND operator to check one bit
+		return (inputState & key) == key;
+	}
 }

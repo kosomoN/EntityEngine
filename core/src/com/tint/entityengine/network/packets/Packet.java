@@ -15,6 +15,7 @@ public abstract class Packet {
 		kryo.register(CreateEntityPacket.class);
 		kryo.register(RemoveEntityPacket.class);
 		kryo.register(InputPacket.class);
+		kryo.register(ConnectionApprovedPacket.class);
 		
 		kryo.register(PositionComponent.class);
 		kryo.register(NetworkComponent.class);

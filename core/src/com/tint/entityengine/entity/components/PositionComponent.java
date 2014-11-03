@@ -14,7 +14,9 @@ public class PositionComponent extends Component implements Networked {
     private transient int tick3;
     
 	private transient boolean hasChanged = true;
-
+	
+	public transient boolean isPlayer = false;
+	
 	public PositionComponent(float x, float y) {
 		x1 = x;
 		y1 = y;
@@ -31,11 +33,13 @@ public class PositionComponent extends Component implements Networked {
     }
 
     public float getLerpX(float tick) {
+    	if(isPlayer) return x2 + (tick % 1) * (x1 - x2);
+    	
     	tick -= 3;
     	
     	//If the current tick is less than the oldest snapshot
     	if(tick < tick3)
-    		return x2;
+    		return x3;
     	
     	//If it's more than the latest
     	if(tick >= tick1)
@@ -57,11 +61,13 @@ public class PositionComponent extends Component implements Networked {
     }
 
     public float getLerpY(float tick) {
+    	if(isPlayer) return y2 + (tick % 1) * (y1 - y2);
+    	
     	tick -= 3;
     	
     	//If the current tick is less than the oldest snapshot
     	if(tick < tick3)
-    		return y2;
+    		return y3;
     	
     	//If it's more than the latest
     	if(tick >= tick1)

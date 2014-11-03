@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.esotericsoftware.kryonet.Connection;
 import com.tint.entityengine.entity.components.PositionComponent;
+import com.tint.entityengine.network.packets.ConnectionApprovedPacket;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
 import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
@@ -60,6 +61,8 @@ public class ServerClient {
 			playerEntity.add(new NetworkComponent());
 			playerEntity.add(playerComponent);
 			gameServer.getEngine().addEntity(playerEntity);
+			
+			connection.sendTCP(new ConnectionApprovedPacket(playerEntity.getId()));
 			
 			state = IN_GAME;
 		}

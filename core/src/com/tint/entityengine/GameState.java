@@ -10,11 +10,12 @@ import com.tint.entityengine.states.State;
 public class GameState extends State {
 	
 	private static final float TICK_LENGTH = 1.0f / 30.0f;
-	
+
 	private ClientHandler client;
-    private Engine engine;
-    private RenderingSystem renderSystem;
-    private InputProcessor inputProcessor = new InputProcessor();
+	private Engine engine;
+	private RenderingSystem renderSystem;
+	private InputProcessor inputProcessor = new InputProcessor();
+    public ClientPlayer player;
     
     private float accumulatedTicks;
 	private int ticks;
@@ -22,7 +23,6 @@ public class GameState extends State {
     public GameState(Launcher launcher) {
         super(launcher);
         engine = new Engine();
-        //engine.addSystem(new MovementSystem());
         renderSystem = new RenderingSystem(engine);
 
 	    client = new ClientHandler(this);
@@ -33,6 +33,7 @@ public class GameState extends State {
 		accumulatedTicks += delta / TICK_LENGTH;
 		
 		while (accumulatedTicks >= 1) {
+			player.update();
 			client.processPackets();
 			engine.update(TICK_LENGTH);
 			inputProcessor.sendInputIfChanged(this);
@@ -63,4 +64,13 @@ public class GameState extends State {
 	public int getTick() {
 		return ticks;
 	}
+	
+	public ClientPlayer getPlayer() {
+		return player;
+	}
+	
+	public InputProcessor getInputProcessor() {
+		return inputProcessor;
+	}
+	
 }

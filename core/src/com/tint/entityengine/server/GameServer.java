@@ -53,7 +53,7 @@ public class GameServer {
 		}
 		serverListener = new ServerListener(this);
 		
-		server.addListener(new Listener.LagListener(60, 60, serverListener));
+		server.addListener(new Listener.LagListener(100, 100, serverListener));
 		//server.addListener(serverListener);
 	}
 

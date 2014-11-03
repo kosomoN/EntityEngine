@@ -3,7 +3,7 @@ package com.tint.entityengine.states;
 import com.badlogic.gdx.Screen;
 import com.tint.entityengine.Launcher;
 
-public class State implements Screen {
+public abstract class State implements Screen {
 
 	Launcher launcher;
 	
