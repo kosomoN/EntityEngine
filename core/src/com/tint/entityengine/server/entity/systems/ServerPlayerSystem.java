@@ -52,9 +52,6 @@ public class ServerPlayerSystem extends IteratingSystem {
 		
 		//TODO Check if new position is valid
 		
-		if(newX > 700)
-			newX = 700;
-		
 		pos.set(newX, newY, gameServer.getTicks());
 	}
 

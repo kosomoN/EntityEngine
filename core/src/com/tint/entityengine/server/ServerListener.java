@@ -1,15 +1,8 @@
 package com.tint.entityengine.server;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.network.packets.Packet;
-import com.tint.entityengine.server.entity.components.NetworkComponent;
-import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
 
 public class ServerListener extends Listener {
 

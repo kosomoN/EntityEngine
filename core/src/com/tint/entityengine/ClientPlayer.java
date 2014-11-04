@@ -67,4 +67,8 @@ public class ClientPlayer {
 		health.addHp(-1);
 	}
 	
+	public PositionComponent getPos() {
+		return pos;
+	}
+	
 }

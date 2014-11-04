@@ -16,6 +16,7 @@ public class GameState extends State {
 	private RenderingSystem renderSystem;
 	private InputProcessor inputProcessor = new InputProcessor();
     public ClientPlayer player;
+    private GameMap map;
     
     private float accumulatedTicks;
 	private int ticks;
@@ -23,7 +24,9 @@ public class GameState extends State {
     public GameState(Launcher launcher) {
         super(launcher);
         engine = new Engine();
-        renderSystem = new RenderingSystem(engine);
+        
+        map = new GameMap(128, 128, "graphics/terrain.png");
+        renderSystem = new RenderingSystem(this, map);
 
 	    client = new ClientHandler(this);
     }
@@ -48,7 +51,7 @@ public class GameState extends State {
 		}
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		renderSystem.render(ticks + accumulatedTicks);
+		renderSystem.render(ticks + accumulatedTicks, launcher.batch);
 	}
 
     @Override
@@ -76,6 +79,10 @@ public class GameState extends State {
 	
 	public InputProcessor getInputProcessor() {
 		return inputProcessor;
+	}
+
+	public GameMap getMap() {
+		return map;
 	}
 	
 }

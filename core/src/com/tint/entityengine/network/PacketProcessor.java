@@ -12,6 +12,7 @@ import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
+import com.tint.entityengine.network.packets.MapChunkPacket;
 import com.tint.entityengine.network.packets.Packet;
 import com.tint.entityengine.network.packets.RemoveEntityPacket;
 import com.tint.entityengine.network.packets.UpdatePacket;
@@ -103,9 +104,18 @@ public class PacketProcessor {
 			}
 			
 			else if(p instanceof RemoveEntityPacket) {
-				gs.getEngine().removeEntity(gs.getClientHandler().getServerIdMap().get(((RemoveEntityPacket) p).serverId));
+				RemoveEntityPacket rep = (RemoveEntityPacket) p;
+				gs.getEngine().removeEntity(gs.getClientHandler().getServerIdMap().get(rep.serverId));
+				gs.getClientHandler().getServerIdMap().remove(rep.serverId);
+			}
+			
+			else if(p instanceof MapChunkPacket) {
+				Log.info("Recived MapChunk");
+				gs.getMap().chunkRecived((MapChunkPacket) p);
 			}
 		}
+		
+		
 	}
 
 }

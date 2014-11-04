@@ -1,11 +1,12 @@
 package com.tint.entityengine.states;
 
 import com.badlogic.gdx.Screen;
+import com.tint.entityengine.Camera;
 import com.tint.entityengine.Launcher;
 
 public abstract class State implements Screen {
 
-	Launcher launcher;
+	protected Launcher launcher;
 	
 	public State(Launcher launcher) {
 		this.launcher = launcher;
@@ -15,7 +16,11 @@ public abstract class State implements Screen {
 	public void render(float delta) {}
 
 	@Override
-	public void resize(int width, int height) {}
+	public void resize(int width, int height) {
+		Camera.orthoCam.viewportWidth = width;
+		Camera.orthoCam.viewportHeight = height;
+		Camera.orthoCam.update();
+	}
 
 	@Override
 	public void show() {}

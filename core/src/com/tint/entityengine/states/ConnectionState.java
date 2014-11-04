@@ -31,8 +31,8 @@ public class ConnectionState extends State {
 		super.render(delta);
 		
 		if(enterGame) {
+			gs.getClientHandler().getClient().addListener(new ClientListener(gs.getClientHandler().getPacketProcessor()));
 			gs.getClientHandler().getClient().removeListener(listener);
-			gs.getClientHandler().getClient().addListener(new Listener.LagListener(100, 100, new ClientListener(gs.getClientHandler().getPacketProcessor())));
 			launcher.enterState(States.GAMESTATE);
 		}
 	}

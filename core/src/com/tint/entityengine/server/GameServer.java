@@ -5,17 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.JsonSerialization;
-import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.tint.entityengine.entity.components.PositionComponent;
+import com.tint.entityengine.GameMap;
 import com.tint.entityengine.network.packets.Packet;
-import com.tint.entityengine.network.packets.UpdatePacket;
 import com.tint.entityengine.server.ServerClient.ClientState;
-import com.tint.entityengine.server.entity.components.NetworkComponent;
-import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
 import com.tint.entityengine.server.entity.systems.ServerNetworkSystem;
 import com.tint.entityengine.server.entity.systems.ServerPlayerSystem;
 
@@ -26,6 +21,7 @@ public class GameServer {
 	private Server server;
 	private Engine engine;
 	private ServerListener serverListener;
+	private GameMap map;
 	
 	private List<ServerClient> clients = new ArrayList<ServerClient>();
 
@@ -39,6 +35,9 @@ public class GameServer {
 		engine.addEntityListener(new ServerEntityListener(this));
 		engine.addSystem(new ServerPlayerSystem(this));
 		engine.addSystem(new ServerNetworkSystem(this));
+		
+		map = new GameMap(128, 128, null);
+		map.randomize();
 
 		jsonSerialization = new JsonSerialization();
 		server = new Server();
@@ -53,8 +52,7 @@ public class GameServer {
 		}
 		serverListener = new ServerListener(this);
 		
-		server.addListener(new Listener.LagListener(100, 100, serverListener));
-		//server.addListener(serverListener);
+		server.addListener(serverListener);
 	}
 
 	private long lastTickTime;
@@ -132,5 +130,9 @@ public class GameServer {
 
 	public List<ServerClient> getClients() {
 		return clients;
+	}
+
+	public GameMap getMap() {
+		return map;
 	}
 }
