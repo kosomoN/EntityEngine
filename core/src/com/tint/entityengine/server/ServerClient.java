@@ -15,7 +15,7 @@ import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.network.packets.MapChunkPacket;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
 import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
-import static com.tint.entityengine.GameMap.CHUNK_SIZE;
+import static com.tint.entityengine.GameMap.*;
 
 public class ServerClient {
 	public enum ClientState { CONNECTING, IN_GAME; }
@@ -77,17 +77,18 @@ public class ServerClient {
 				for(int j = 0; j < gameServer.getMap().getHeight() / CHUNK_SIZE; j++) {
 					
 					//Loop through chunk tiles
-					for(int cx = 0; cx < CHUNK_SIZE; cx++) {
-						for(int cy = 0; cy < CHUNK_SIZE; cy++) {
-							mcp.startX = i * CHUNK_SIZE;
-							mcp.startY = j * CHUNK_SIZE;
-							
-							mcp.tiles[cx][cy] = gameServer.getMap().getTile(i * CHUNK_SIZE + cx, j * CHUNK_SIZE + cy);
+					for(int l = 0; l < LAYERS; l++) {
+						for(int cx = 0; cx < CHUNK_SIZE; cx++) {
+							for(int cy = 0; cy < CHUNK_SIZE; cy++) {
+								mcp.startX = i * CHUNK_SIZE;
+								mcp.startY = j * CHUNK_SIZE;
+								
+								mcp.tiles[cx][cy] = gameServer.getMap().getTile(i * CHUNK_SIZE + cx, j * CHUNK_SIZE + cy, l);
+							}
 						}
+						mcp.layer = l;
+						connection.sendTCP(mcp);
 					}
-					
-					System.out.println("Sending MapChunk");
-					connection.sendTCP(mcp);
 				}
 			}
 			

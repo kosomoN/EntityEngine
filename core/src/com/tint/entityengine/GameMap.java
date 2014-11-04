@@ -10,15 +10,16 @@ public class GameMap {
 	
 	private static final int TILE_SIZE = 32;
 	public static final int CHUNK_SIZE = 16;
+	public static final int LAYERS = 2;
 	
 	private int width, height;
-	private short[][] tiles;
+	private short[][][] tiles;
 	private TextureRegion[] tileset;
 	
 	public GameMap(int width, int height, String tilesetPath) {
 		this.width = width;
 		this.height = height;
-		tiles = new short[width][height];
+		tiles = new short[LAYERS][width][height];
 		
 		if(tilesetPath != null) {
 			Texture tilesetTex = new Texture(Gdx.files.internal(tilesetPath));
@@ -35,9 +36,11 @@ public class GameMap {
 			}
 		}
 		
-		for(int i = 0; i < width; i++) {
-			for(int j = 0; j < height; j++) {
-				tiles[i][j] = -1;
+		for(int l = 0; l < LAYERS; l++) {
+			for(int i = 0; i < width; i++) {
+				for(int j = 0; j < height; j++) {
+					tiles[l][i][j] = -1;
+				}
 			}
 		}
 	}
@@ -45,9 +48,11 @@ public class GameMap {
 	public void randomize() {
 		for(int i = 0; i < width; i++) {
 			for(int j = 0; j < height; j++) {
-				tiles[i][j] = (short) (Math.random() * 128);
+				tiles[0][i][j] = (short) (Math.random() * 128);
 			}
 		}
+		
+		tiles[1][0][0] = 129;
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -69,10 +74,12 @@ public class GameMap {
 		if(endY < 0) endY = 0;
 		else if(endY >= height) endY = height - 1;
 		
-		for(int i = startX; i < endX; i++) {
-			for(int j = startY; j < endY; j++) {
-				if(tiles[i][j] != -1)
-					batch.draw(tileset[tiles[i][j]], i * TILE_SIZE, j * TILE_SIZE);
+		for(int l = 0; l < LAYERS; l++) {
+			for(int i = startX; i < endX; i++) {
+				for(int j = startY; j < endY; j++) {
+					if(tiles[l][i][j] != -1)
+						batch.draw(tileset[tiles[l][i][j]], i * TILE_SIZE, j * TILE_SIZE);
+				}
 			}
 		}
 		
@@ -81,7 +88,7 @@ public class GameMap {
 	public void chunkRecived(MapChunkPacket mcp) {
 		for(int i = 0; i < mcp.tiles.length; i++) {
 			for(int j = 0; j < mcp.tiles[0].length; j++) {
-				tiles[mcp.startX + i][mcp.startY + j] = mcp.tiles[i][j];
+				tiles[mcp.layer][mcp.startX + i][mcp.startY + j] = mcp.tiles[i][j];
 			}
 		}
 	}
@@ -94,7 +101,11 @@ public class GameMap {
 		return width;
 	}
 	
-	public short getTile(int x, int y) {
-		return tiles[x][y];
+	public short getTile(int x, int y, int layer) {
+		return tiles[layer][x][y];
+	}
+
+	public void setTile(int x, int y, int layer, short tile) {
+		tiles[layer][x][y] = tile;
 	}
 }

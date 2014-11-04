@@ -1,10 +1,17 @@
 package com.tint.entityengine.server;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.JsonSerialization;
 import com.esotericsoftware.kryonet.Server;
@@ -36,9 +43,8 @@ public class GameServer {
 		engine.addSystem(new ServerPlayerSystem(this));
 		engine.addSystem(new ServerNetworkSystem(this));
 		
-		map = new GameMap(128, 128, null);
-		map.randomize();
-
+		loadMap();
+		
 		jsonSerialization = new JsonSerialization();
 		server = new Server();
 		Packet.register(server.getKryo());
@@ -134,5 +140,34 @@ public class GameServer {
 
 	public GameMap getMap() {
 		return map;
+	}
+	
+	//Should hopefully maybe at some point be replaced
+	private void loadMap() {
+		try {
+			JsonReader jsonReader = new JsonReader();
+			JsonValue mapJson = jsonReader.parse(new FileInputStream(new File("maps/Basic.json")));
+
+			map = new GameMap(mapJson.getInt("width"), mapJson.getInt("height"), null);
+			
+			short[] tiles = mapJson.get("layers").get(0).get("data").asShortArray();
+			for(int i = 0; i < map.getWidth(); i++) {
+				for(int j = 0; j < map.getWidth(); j++) {
+					//Flip the map
+					map.setTile(i, (map.getHeight() - j - 1), 0, (short) (tiles[j * map.getWidth() + i] - 1));
+				}
+			}
+			
+			short[] cosmeticTiles = mapJson.get("layers").get(1).get("data").asShortArray();
+			for(int i = 0; i < map.getWidth(); i++) {
+				for(int j = 0; j < map.getWidth(); j++) {
+					map.setTile(i, (map.getHeight() - j - 1), 1, (short) (cosmeticTiles[j * map.getWidth() + i] - 1));
+				}
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

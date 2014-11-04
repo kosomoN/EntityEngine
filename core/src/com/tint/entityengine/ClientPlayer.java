@@ -34,7 +34,6 @@ public class ClientPlayer {
 	}
 	
 	public void update() {
-		System.out.println(health.getHp() + "/" + health.getMaxHp());
 		float newX = pos.getX();
 		float newY = pos.getY();
 		
@@ -63,8 +62,6 @@ public class ClientPlayer {
 		//TODO Check if new position is valid
 	
 		pos.set(newX, newY, gs.getTick());
-		
-		health.addHp(-1);
 	}
 	
 	public PositionComponent getPos() {
