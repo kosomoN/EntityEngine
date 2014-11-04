@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Entity;
 import com.esotericsoftware.minlog.Log;
 import com.tint.entityengine.GameState;
 import com.tint.entityengine.Mappers;
+import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.network.packets.Packet;
@@ -65,6 +66,9 @@ public class PacketProcessor {
 									if(dx * dx + dy * dy > CORRECTION_THRESHOLD) {
 										pos.set(newPos, gs.getTick());
 									}
+								} else if(c instanceof HealthComponent) {
+									HealthComponent health = Mappers.health.get(ent);
+									health.setHp(((HealthComponent) c).getHp());
 								}
 							}
 							
@@ -75,6 +79,9 @@ public class PacketProcessor {
 							if(c instanceof PositionComponent) {
 								PositionComponent pos = Mappers.position.get(ent);
 								pos.set((PositionComponent) c, gs.getTick());
+							} else if(c instanceof HealthComponent) {
+								HealthComponent health = Mappers.health.get(ent);
+								health.setHp(((HealthComponent) c).getHp());
 							}
 						}
 					}

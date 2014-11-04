@@ -3,6 +3,7 @@ package com.tint.entityengine;
 import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.*;
 
 import com.badlogic.ashley.core.Entity;
+import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 
 public class ClientPlayer {
@@ -11,6 +12,7 @@ public class ClientPlayer {
 	public long serverEntityId;
 	private Entity entity;
 	private PositionComponent pos;
+	private HealthComponent health;
 	private GameState gs;
 	private float speed = 5;
 	
@@ -23,6 +25,8 @@ public class ClientPlayer {
 		
 		pos = Mappers.position.get(entity);
 		pos.isPlayer = true;
+		
+		health = Mappers.health.get(entity);
 	}
 	
 	public Entity getEntity() {
@@ -30,7 +34,7 @@ public class ClientPlayer {
 	}
 	
 	public void update() {
-		
+		System.out.println(health.getHp() + "/" + health.getMaxHp());
 		float newX = pos.getX();
 		float newY = pos.getY();
 		
@@ -59,6 +63,8 @@ public class ClientPlayer {
 		//TODO Check if new position is valid
 	
 		pos.set(newX, newY, gs.getTick());
+		
+		health.addHp(-1);
 	}
 	
 }

@@ -3,6 +3,7 @@ package com.tint.entityengine.network.packets;
 import java.util.ArrayList;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
 
@@ -18,6 +19,7 @@ public abstract class Packet {
 		kryo.register(ConnectionApprovedPacket.class);
 		
 		kryo.register(PositionComponent.class);
+		kryo.register(HealthComponent.class);
 		kryo.register(NetworkComponent.class);
 		
 		kryo.register(ArrayList.class);

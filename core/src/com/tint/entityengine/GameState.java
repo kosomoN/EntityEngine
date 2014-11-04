@@ -42,6 +42,11 @@ public class GameState extends State {
 			ticks++;
 		}
 		
+		if(Mappers.health.get(player.getEntity()).getHp() <= 0) {
+			client.getClient().close();
+			Gdx.app.exit();
+		}
+		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		renderSystem.render(ticks + accumulatedTicks);
 	}

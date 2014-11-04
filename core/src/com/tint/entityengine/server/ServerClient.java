@@ -1,17 +1,19 @@
 package com.tint.entityengine.server;
 
+import static com.tint.entityengine.server.ServerClient.ClientState.CONNECTING;
+import static com.tint.entityengine.server.ServerClient.ClientState.IN_GAME;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.esotericsoftware.kryonet.Connection;
+import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.network.packets.ConnectionApprovedPacket;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
 import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
-
-import static com.tint.entityengine.server.ServerClient.ClientState.*;
 
 public class ServerClient {
 	public enum ClientState { CONNECTING, IN_GAME; }
@@ -58,6 +60,7 @@ public class ServerClient {
 			playerEntity = new Entity();
 			playerEntity.add(new PositionComponent((float) (Math.random() * 1000), (float) (Math.random() * 600)));
 			playerComponent = new ServerPlayerComponent();
+			playerEntity.add(new HealthComponent(100));
 			playerEntity.add(new NetworkComponent());
 			playerEntity.add(playerComponent);
 			gameServer.getEngine().addEntity(playerEntity);
