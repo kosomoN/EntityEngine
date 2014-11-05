@@ -13,6 +13,8 @@ import com.tint.entityengine.ClientPlayer;
 import com.tint.entityengine.GameState;
 import com.tint.entityengine.Launcher;
 import com.tint.entityengine.Launcher.States;
+import com.tint.entityengine.entity.components.RenderComponent;
+import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
 import com.tint.entityengine.network.packets.ConnectionApprovedPacket;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
 
@@ -31,8 +33,6 @@ public class ConnectionState extends State {
 		super.render(delta);
 		
 		if(enterGame) {
-			gs.getClientHandler().getClient().addListener(new ClientListener(gs.getClientHandler().getPacketProcessor()));
-			gs.getClientHandler().getClient().removeListener(listener);
 			launcher.enterState(States.GAMESTATE);
 		}
 	}
@@ -55,7 +55,7 @@ public class ConnectionState extends State {
 		Client client = gs.getClientHandler().getClient();
 		client.start();
 
-		client.connect(5000, "localhost", 54333, 54334);
+		client.connect(5000, "localhost", 54333, 54333);
 		
 		
 		listener = new Listener() {
@@ -71,6 +71,9 @@ public class ConnectionState extends State {
 					gs.player.serverEntityId = cap.playerEntityId;
 					gs.player.setPlayerEntity(gs.getClientHandler().getServerIdMap().get(cap.playerEntityId));
 					
+					gs.getClientHandler().getClient().removeListener(listener);
+					gs.getClientHandler().getClient().addListener(new ClientListener(gs.getClientHandler().getPacketProcessor()));
+					
 					enterGame = true;
 				} 
 				
@@ -83,6 +86,15 @@ public class ConnectionState extends State {
 					for(Component c : cep.getComponents()) {
 						e.add(c);
 					}
+					
+					RenderComponent rc = new RenderComponent();
+					rc.renderer = new DirectionalRenderer();
+					((DirectionalRenderer) rc.renderer).animFile = "Player";
+					rc.renderer.initialize(gs);
+					e.add(rc);
+					System.out.println(rc);
+					gs.getEngine().addEntity(e);
+					
 					gs.getEngine().addEntity(e);
 					
 					gs.getClientHandler().entityAdded(cep.serverId, e);

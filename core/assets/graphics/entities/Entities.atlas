@@ -1,0 +1,13 @@
+
+Entities.png
+size: 128,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Player anim 32 7 true 150 3
+  rotate: false
+  xy: 0, 0
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: -1

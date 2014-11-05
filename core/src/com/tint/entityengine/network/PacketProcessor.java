@@ -11,6 +11,8 @@ import com.tint.entityengine.GameState;
 import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
+import com.tint.entityengine.entity.components.RenderComponent;
+import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.network.packets.MapChunkPacket;
 import com.tint.entityengine.network.packets.Packet;
@@ -98,6 +100,13 @@ public class PacketProcessor {
 				for(Component c : cep.getComponents()) {
 					e.add(c);
 				}
+				
+				RenderComponent rc = new RenderComponent();
+				rc.renderer = new DirectionalRenderer();
+				((DirectionalRenderer) rc.renderer).animFile = "Player";
+				rc.renderer.initialize(gs);
+				e.add(rc);
+				System.out.println(rc);
 				gs.getEngine().addEntity(e);
 				
 				gs.getClientHandler().entityAdded(cep.serverId, e);

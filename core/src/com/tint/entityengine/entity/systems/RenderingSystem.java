@@ -10,6 +10,7 @@ import com.tint.entityengine.GameMap;
 import com.tint.entityengine.GameState;
 import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.PositionComponent;
+import com.tint.entityengine.entity.components.RenderComponent;
 
 public class RenderingSystem  {
 
@@ -22,7 +23,7 @@ public class RenderingSystem  {
     	this.map = map;
     	this.gs = gs;
         shapeRenderer = new ShapeRenderer();
-        entities = gs.getEngine().getEntitiesFor(Family.getFor(PositionComponent.class));
+        entities = gs.getEngine().getEntitiesFor(Family.getFor(RenderComponent.class));
     }
 
     public void render(float frameTime, SpriteBatch batch) {
@@ -34,9 +35,17 @@ public class RenderingSystem  {
     	
     	batch.begin();
     	map.render(batch);
-    	batch.end();
     	
-    	shapeRenderer.setProjectionMatrix(Camera.orthoCam.combined);
+        for (int i = 0; i < entities.size(); ++i) {
+            Entity entity = entities.get(i);
+            RenderComponent renderComp = Mappers.render.get(entity);
+            
+            renderComp.renderer.render(batch, entity, frameTime);
+        }
+        
+        batch.end();
+        /*
+        shapeRenderer.setProjectionMatrix(Camera.orthoCam.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         for (int i = 0; i < entities.size(); ++i) {
@@ -46,6 +55,6 @@ public class RenderingSystem  {
             shapeRenderer.rect(pos.getLerpX(frameTime) - 10, pos.getLerpY(frameTime) - 10, 20, 20);
         }
 
-        shapeRenderer.end();
+        shapeRenderer.end();*/
     }
 }

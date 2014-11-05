@@ -17,8 +17,8 @@ public abstract class State implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		Camera.orthoCam.viewportWidth = width;
-		Camera.orthoCam.viewportHeight = height;
+		Camera.orthoCam.viewportWidth = width / 2;
+		Camera.orthoCam.viewportHeight = height / 2;
 		Camera.orthoCam.update();
 	}
 

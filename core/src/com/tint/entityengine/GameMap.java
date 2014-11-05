@@ -45,16 +45,6 @@ public class GameMap {
 		}
 	}
 	
-	public void randomize() {
-		for(int i = 0; i < width; i++) {
-			for(int j = 0; j < height; j++) {
-				tiles[0][i][j] = (short) (Math.random() * 128);
-			}
-		}
-		
-		tiles[1][0][0] = 129;
-	}
-	
 	public void render(SpriteBatch batch) {
 		//Lower left
 		int startX = (int) ((Camera.orthoCam.position.x - Camera.orthoCam.viewportWidth / 2) / TILE_SIZE);

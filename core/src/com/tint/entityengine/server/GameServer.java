@@ -50,7 +50,7 @@ public class GameServer {
 		Packet.register(server.getKryo());
 		server.start();
 		try {
-			server.bind(54333, 54334);
+			server.bind(54333, 54333);
 		} catch(IOException e) {
 			System.err.println("Failed to bind server");
 			e.printStackTrace();

@@ -7,7 +7,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.esotericsoftware.minlog.Log;
 import com.tint.entityengine.states.ConnectionState;
 import com.tint.entityengine.states.State;
 
@@ -22,7 +21,7 @@ public class Launcher extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		Camera.orthoCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		Camera.orthoCam = new OrthographicCamera(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 		
 		load();
 		enterState(States.CONNECTIONSTATE);

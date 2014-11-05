@@ -9,7 +9,7 @@ import com.tint.entityengine.states.State;
 
 public class GameState extends State {
 	
-	private static final float TICK_LENGTH = 1.0f / 30.0f;
+	public static final float TICK_LENGTH = 1.0f / 30.0f;
 
 	private ClientHandler client;
 	private Engine engine;
@@ -24,6 +24,15 @@ public class GameState extends State {
     public GameState(Launcher launcher) {
         super(launcher);
         engine = new Engine();
+        
+        //PLZ MOVE LOADING
+        try {
+			Assets.loadAssets();
+		} catch (Exception e) {
+			System.err.println("Failed to load assets");
+			e.printStackTrace();
+			System.exit(1);
+		}
         
         map = new GameMap(128, 128, "graphics/terrain.png");
         renderSystem = new RenderingSystem(this, map);
