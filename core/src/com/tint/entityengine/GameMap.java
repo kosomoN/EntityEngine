@@ -8,7 +8,7 @@ import com.tint.entityengine.network.packets.MapChunkPacket;
 
 public class GameMap {
 	
-	private static final int TILE_SIZE = 32;
+	public static final int TILE_SIZE = 32;
 	public static final int CHUNK_SIZE = 16;
 	public static final int LAYERS = 2;
 	
@@ -39,7 +39,7 @@ public class GameMap {
 		for(int l = 0; l < LAYERS; l++) {
 			for(int i = 0; i < width; i++) {
 				for(int j = 0; j < height; j++) {
-					tiles[l][i][j] = -1;
+					tiles[l][i][j] = 162;
 				}
 			}
 		}
@@ -89,6 +89,10 @@ public class GameMap {
 	
 	public int getHeight() {
 		return width;
+	}
+	
+	public boolean isOnMap(float x, float y) {
+		return (x >= 0 && y >= 0 && x < getWidth() && y < getHeight());
 	}
 	
 	public short getTile(int x, int y, int layer) {
