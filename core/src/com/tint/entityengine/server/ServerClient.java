@@ -10,11 +10,15 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.esotericsoftware.kryonet.Connection;
 import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
+import com.tint.entityengine.entity.components.RenderComponent;
+import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
 import com.tint.entityengine.network.packets.ConnectionApprovedPacket;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.network.packets.MapChunkPacket;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
+import com.tint.entityengine.server.entity.components.Networked;
 import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
+
 import static com.tint.entityengine.GameMap.*;
 
 public class ServerClient {
@@ -52,7 +56,7 @@ public class ServerClient {
 				ImmutableArray<Component> components = e.getComponents();
 				for(int j = 0; j < components.size(); j++) {
 					Component comp =  components.get(j);
-					if(!(comp instanceof ServerPlayerComponent))
+					if(comp instanceof Networked)
 						cep.addComponent(components.get(j));
 				}
 				
@@ -60,9 +64,15 @@ public class ServerClient {
 			}
 			
 			playerEntity = new Entity();
-			playerEntity.add(new PositionComponent((float) (Math.random() * 1000), (float) (Math.random() * 600)));
+			playerEntity.add(new PositionComponent((float) (Math.random() * 1000 + 1500), (float) (Math.random() * 1000 + 1500)));
 			playerComponent = new ServerPlayerComponent();
 			playerEntity.add(new HealthComponent(100));
+			
+			RenderComponent rc = new RenderComponent();
+			rc.renderer = new DirectionalRenderer();
+			((DirectionalRenderer) rc.renderer).animFile = "Player";
+			playerEntity.add(rc);
+			
 			playerEntity.add(new NetworkComponent());
 			playerEntity.add(playerComponent);
 			gameServer.getEngine().addEntity(playerEntity);

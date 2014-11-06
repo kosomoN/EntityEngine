@@ -35,7 +35,6 @@ public class RenderingSystem  {
     	
     	batch.begin();
     	map.render(batch);
-    	
         for (int i = 0; i < entities.size(); ++i) {
             Entity entity = entities.get(i);
             RenderComponent renderComp = Mappers.render.get(entity);

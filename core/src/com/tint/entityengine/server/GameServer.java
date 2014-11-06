@@ -8,16 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Json;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.JsonSerialization;
 import com.esotericsoftware.kryonet.Server;
 import com.tint.entityengine.GameMap;
+import com.tint.entityengine.entity.components.PositionComponent;
+import com.tint.entityengine.entity.components.RenderComponent;
+import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
 import com.tint.entityengine.network.packets.Packet;
 import com.tint.entityengine.server.ServerClient.ClientState;
+import com.tint.entityengine.server.entity.components.AiComponent;
+import com.tint.entityengine.server.entity.components.NetworkComponent;
+import com.tint.entityengine.server.entity.components.ai.AiCow;
+import com.tint.entityengine.server.entity.systems.AiSystem;
 import com.tint.entityengine.server.entity.systems.ServerNetworkSystem;
 import com.tint.entityengine.server.entity.systems.ServerPlayerSystem;
 
@@ -42,6 +48,7 @@ public class GameServer {
 		engine.addEntityListener(new ServerEntityListener(this));
 		engine.addSystem(new ServerPlayerSystem(this));
 		engine.addSystem(new ServerNetworkSystem(this));
+		engine.addSystem(new AiSystem(this));
 		
 		loadMap();
 		
@@ -59,6 +66,19 @@ public class GameServer {
 		serverListener = new ServerListener(this);
 		
 		server.addListener(serverListener);
+		
+		Entity e = new Entity();
+		PositionComponent pos = new PositionComponent(1900, 1900);
+		e.add(pos);
+		e.add(new NetworkComponent());
+		e.add(new AiComponent(new AiCow(pos)));
+		
+		RenderComponent rc = new RenderComponent();
+		rc.renderer = new DirectionalRenderer();
+		((DirectionalRenderer) rc.renderer).animFile = "Cow";
+		e.add(rc);
+		
+		engine.addEntity(e);
 	}
 
 	private long lastTickTime;

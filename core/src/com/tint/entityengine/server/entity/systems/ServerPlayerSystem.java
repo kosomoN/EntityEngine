@@ -17,7 +17,6 @@ public class ServerPlayerSystem extends IteratingSystem {
 	
 	private GameServer gameServer;
 
-	@SuppressWarnings("unchecked")
 	public ServerPlayerSystem(GameServer gameServer) {
 		super(Family.getFor(ServerPlayerComponent.class));
 		this.gameServer = gameServer;

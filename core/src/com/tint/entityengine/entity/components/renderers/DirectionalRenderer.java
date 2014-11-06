@@ -14,6 +14,8 @@ public class DirectionalRenderer implements Renderer {
 	private static final int N = 0, E = 1, S = 2, W = 3;
 	
 	private transient Animation[] anims;
+	private transient Animation[] walkingAnims;
+	
 	//Just to make the animations not exactly synchronized
 	private transient float animTimeOffset;
 	private transient Vector2 offset;
@@ -25,13 +27,14 @@ public class DirectionalRenderer implements Renderer {
 	@Override
 	public void initialize(GameState gs) {
 		anims = Assets.getDirectionAnims(animFile);
+		walkingAnims = Assets.getDirectionAnims(animFile + "Walking");
+		
 		offset = Assets.getAnimOffset(animFile);
 		if(anims == null) {
 			throw new RuntimeException("Animation is null");
 		}
 		
 		animTimeOffset = (float) Math.random();
-		System.out.println(animTimeOffset);
 	}
 	
 	@Override
@@ -40,15 +43,15 @@ public class DirectionalRenderer implements Renderer {
 		float lerpX = pos.getLerpX(tickTime);
 		float lerpY = pos.getLerpY(tickTime);
 		
-		//If the entities has moved
-		if(lerpX != oldX || lerpY != oldY) {
+		//If the entities has moved. Slight floating-point error was causing bugs
+		if(Math.abs(lerpX - oldX) > 0.01 || Math.abs(lerpY - oldY) > 0.01 ) {
 			float dx = lerpX - oldX;
 			float dy = lerpY - oldY;
 			
 			oldX = lerpX;
 			oldY = lerpY;
 			
-			//Calculate direction
+			//Calculate direction. Remove some to show sideways when going diagonally
 			if(Math.abs(dx) >= Math.abs(dy) - 0.01) {
 				if(dx > 0)
 					dir = W;
@@ -59,6 +62,11 @@ public class DirectionalRenderer implements Renderer {
 					dir = N;
 				else
 					dir = S;
+			}
+			
+			if(walkingAnims != null) {
+				batch.draw(walkingAnims[dir].getKeyFrame(tickTime * GameState.TICK_LENGTH + animTimeOffset, true), lerpX - offset.x, lerpY - offset.y);
+				return;
 			}
 		}
 		

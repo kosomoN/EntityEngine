@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.esotericsoftware.kryo.Kryo;
 import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
+import com.tint.entityengine.entity.components.RenderComponent;
+import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
 
 public abstract class Packet {
@@ -18,6 +20,10 @@ public abstract class Packet {
 		kryo.register(InputPacket.class);
 		kryo.register(ConnectionApprovedPacket.class);
 		kryo.register(MapChunkPacket.class);
+		
+		kryo.register(RenderComponent.class);
+		kryo.register(DirectionalRenderer.class);
+		
 		kryo.register(short[].class);
 		kryo.register(short[][].class);
 		
