@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.esotericsoftware.kryonet.Connection;
 import com.tint.entityengine.entity.components.HealthComponent;
+import com.tint.entityengine.entity.components.HitboxComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
 import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
@@ -64,7 +65,8 @@ public class ServerClient {
 			}
 			
 			playerEntity = new Entity();
-			playerEntity.add(new PositionComponent((float) (Math.random() * 1000 + 1500), (float) (Math.random() * 1000 + 1500)));
+			playerEntity.add(new HitboxComponent(32, 32));
+			playerEntity.add(new PositionComponent((float) (Math.random() * (1000 - 16) + 16), (float) (Math.random() * (600 - 16) + 16)));
 			playerComponent = new ServerPlayerComponent();
 			playerEntity.add(new HealthComponent(100));
 			

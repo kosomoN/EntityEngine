@@ -20,7 +20,6 @@ public class ClientPlayer {
 	private HitboxComponent hitbox;
 	private GameState gs;
 	private float speed = 5;
-	private float[][] hitboxOffset = new float[4][2];
 	
 	public ClientPlayer(GameState gs) {
 		this.gs = gs;
@@ -33,25 +32,7 @@ public class ClientPlayer {
 		pos.isPlayer = true;
 		
 		health = Mappers.health.get(entity);
-		
-		entity.add(new HitboxComponent(32, 32));
 		hitbox = Mappers.hitbox.get(entity);
-		
-		for(int i = 0; i < 4; i++) {
-			for(int j = 0; j < 2; j++) {
-				if(j == 0)
-					if(i == 0 || i == 3)
-						hitboxOffset[i][j] = -hitbox.getWidth() / GameMap.TILE_SIZE;
-					else
-						hitboxOffset[i][j] = hitbox.getWidth() / GameMap.TILE_SIZE;
-				else
-					if(i == 0 || i == 1)
-						hitboxOffset[i][j] = -hitbox.getHeight() / GameMap.TILE_SIZE;
-					else
-						hitboxOffset[i][j] = hitbox.getHeight() / GameMap.TILE_SIZE;
-			}
-		}
-		
 	}
 	
 	public Entity getEntity() {
@@ -87,33 +68,21 @@ public class ClientPlayer {
 		if(in.getKey(KEY_RIGHT))
 			testX += speed * modifier;
 		
-		// Checks all 4 corners, < 0 means it's blocked
 		for(int i = 0; i < 4; i++) {
-			float x = (float) (testX /  GameMap.TILE_SIZE);
-			float y = (float) (testY / (float) GameMap.TILE_SIZE);
-			float tileX = (float) (x + hitboxOffset[i][0]);
-			float tileY = (float) (y + hitboxOffset[i][1]);
+			float x = (float) (testX / GameMap.TILE_SIZE);
+			float y = (float) (testY / GameMap.TILE_SIZE);
+			float tileX = (float) (x + hitbox.getOffset(i, 0));
+			float tileY = (float) (y + hitbox.getOffset(i, 1));
 			
 			if(gs.getMap().isOnMap(tileX, tileY)) {
-				System.out.println(tileX + ", " + tileY);
-				newX = testX;
-				newY = testY;
-			} else {
-				if(tileX >= 1.5f && tileX < gs.getMap().getWidth())
-					newX = testX;
-				
-				if(tileY >= 1.5f && tileY < gs.getMap().getHeight())
-					newY = testY;
-			}
-				/*
-				if(gs.getMap().getTile((int) tileX, (int) tileY, 0) < 0) {
+				if(gs.getMap().isBlocked((int) tileX, (int) tileY, 1)) {
 					float xOverlap = tileX % 1.0f * GameMap.TILE_SIZE;
 					float yOverlap = tileY % 1.0f * GameMap.TILE_SIZE;
 					
-					if(hitboxOffset[i][0] < 0)
+					if(hitbox.getOffset(i, 0) < 0)
 						xOverlap = -(GameMap.TILE_SIZE - xOverlap);
 					
-					if(hitboxOffset[i][1] < 0)
+					if(hitbox.getOffset(i, 1) < 0)
 						yOverlap = -(GameMap.TILE_SIZE - yOverlap);
 					
 					//Fix player getting stuck in walls
@@ -124,18 +93,25 @@ public class ClientPlayer {
 					else
 						testY -= yOverlap;
 				}
-			} else {
-				System.out.println("Outside of Map");
-				if(tileX < 1)
-					testX += 2 * speed * modifier;
-				else if(tileX + 0.5f > gs.getMap().getWidth() * GameMap.TILE_SIZE)
-					testX -= 2 * speed * modifier;
 				
-				if(tileY < 1)
-					testY += 2 * speed * modifier;
-				else if(tileY + 0.5f > gs.getMap().getHeight() * GameMap.TILE_SIZE)
-					testY -= 2 * speed * modifier;
-			}*/
+				newX = testX;
+				newY = testY;
+			} else {
+				if(tileX < 0)
+					newX = 16;
+				else if(tileX >= gs.getMap().getWidth())
+					newX = gs.getMap().getWidth() - 16;
+				else
+					newX = testX;
+				
+				if(tileY < 0)
+					newY = 16;
+				else if(tileY >= gs.getMap().getHeight())
+					newY = gs.getMap().getHeight() - 16;
+				else
+					newY = testY;
+				break;
+			}
 		}
 		
 		pos.set(newX, newY, gs.getTick());

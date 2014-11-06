@@ -51,7 +51,7 @@ public class RenderingSystem  {
             Entity entity = entities.get(i);
             PositionComponent pos = Mappers.position.get(entity);
             
-            shapeRenderer.rect(pos.getLerpX(frameTime) - 10, pos.getLerpY(frameTime) - 10, 20, 20);
+            shapeRenderer.rect(pos.getLerpX(frameTime) - 16, pos.getLerpY(frameTime) - 16, 32, 32);
         }
 
         shapeRenderer.end();*/

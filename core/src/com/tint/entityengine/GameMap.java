@@ -1,5 +1,7 @@
 package com.tint.entityengine;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +16,7 @@ public class GameMap {
 	
 	private int width, height;
 	private short[][][] tiles;
+	private short[] blockedIndexes; // Costal tiles: { 93, 94, 125, 126 } TODO Add more manually
 	private TextureRegion[] tileset;
 	
 	public GameMap(int width, int height, String tilesetPath) {
@@ -43,6 +46,13 @@ public class GameMap {
 				}
 			}
 		}
+		tiles[1][2][5] = 125;
+		
+		blockedIndexes = new short[4];
+		blockedIndexes[0] = 93;
+		blockedIndexes[1] = 94;
+		blockedIndexes[2] = 125;
+		blockedIndexes[3] = 126;
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -97,6 +107,15 @@ public class GameMap {
 	
 	public short getTile(int x, int y, int layer) {
 		return tiles[layer][x][y];
+	}
+	
+	public boolean isBlocked(int x, int y, int layer) {
+		short tile = getTile(x, y, layer);
+		for(int i = 0; i < blockedIndexes.length; i++) {
+			if(blockedIndexes[i] == tile)
+				return true;
+		}
+		return false;
 	}
 
 	public void setTile(int x, int y, int layer, short tile) {

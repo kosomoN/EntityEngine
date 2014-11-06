@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.tint.entityengine.entity.components.HealthComponent;
+import com.tint.entityengine.entity.components.HitboxComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
 import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
@@ -28,6 +29,7 @@ public abstract class Packet {
 		kryo.register(short[][].class);
 		
 		kryo.register(PositionComponent.class);
+		kryo.register(HitboxComponent.class);
 		kryo.register(HealthComponent.class);
 		kryo.register(NetworkComponent.class);
 		
