@@ -12,20 +12,28 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Assets {
 
+	private static Map<String, TextureRegion> textureRegions = new HashMap<String, TextureRegion>();
 	private static Map<String, Animation[]> dirAnims = new HashMap<String, Animation[]>();
-	private static Map<String, Vector2> animOffsets = new HashMap<String, Vector2>();
+	private static Map<String, Vector2> renderOffsets = new HashMap<String, Vector2>();
 	private static TextureAtlas atlas;
 	
 	public static void loadAssets() throws Exception {
 		atlas = new TextureAtlas("graphics/entities/Entities.atlas");
 		
 		for(AtlasRegion region : atlas.getRegions()) {
+
+			String[] splits = region.name.split(" ");
+			
+			textureRegions.put(splits[0], region);
+			
+			if(splits[1].equals("anim"))
+				renderOffsets.put(splits[0], new Vector2(Integer.parseInt(splits[2]), Integer.parseInt(splits[3])));
+			else
+				renderOffsets.put(splits[0], new Vector2(Integer.parseInt(splits[1]), Integer.parseInt(splits[2])));
 			
 			//Load animations. Every anim contains for directions and index shows animation frames
 			if(region.name.contains("anim")) {
 				Animation[] anims = new Animation[4];
-
-				String[] splits = region.name.split(" ");
 				
 				//Second last number is frame time
 				int animTime = Integer.parseInt(splits[splits.length - 2]);
@@ -49,8 +57,6 @@ public class Assets {
 				}
 				
 				dirAnims.put(splits[0], anims);
-				
-				animOffsets.put(splits[0], new Vector2(Integer.parseInt(splits[2]), Integer.parseInt(splits[3])));
 			}
 		}
 	}
@@ -60,6 +66,10 @@ public class Assets {
 	}
 
 	public static Vector2 getAnimOffset(String animFile) {
-		return animOffsets.get(animFile);
+		return renderOffsets.get(animFile);
+	}
+
+	public static TextureRegion getTexture(String textureName) {
+		return textureRegions.get(textureName);
 	}
 }

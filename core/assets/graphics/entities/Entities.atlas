@@ -25,6 +25,13 @@ CowWalking anim 64 40 false 100 4
   orig: 512, 512
   offset: 0, 0
   index: -1
+Log 16 16
+  rotate: false
+  xy: 576, 736
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 Player anim 32 7 false 0 1
   rotate: false
   xy: 512, 512

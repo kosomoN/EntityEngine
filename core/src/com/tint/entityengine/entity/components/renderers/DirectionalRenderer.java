@@ -38,8 +38,7 @@ public class DirectionalRenderer implements Renderer {
 	}
 	
 	@Override
-	public void render(SpriteBatch batch, Entity e, float tickTime) {
-		PositionComponent pos = Mappers.position.get(e);
+	public void render(SpriteBatch batch, Entity e, PositionComponent pos, float tickTime) {
 		float lerpX = pos.getLerpX(tickTime);
 		float lerpY = pos.getLerpY(tickTime);
 		

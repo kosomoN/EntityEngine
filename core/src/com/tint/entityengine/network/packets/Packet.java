@@ -8,6 +8,7 @@ import com.tint.entityengine.entity.components.HitboxComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
 import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
+import com.tint.entityengine.entity.components.renderers.TextureRenderer;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
 
 public abstract class Packet {
@@ -24,6 +25,7 @@ public abstract class Packet {
 		
 		kryo.register(RenderComponent.class);
 		kryo.register(DirectionalRenderer.class);
+		kryo.register(TextureRenderer.class);
 		
 		kryo.register(short[].class);
 		kryo.register(short[][].class);

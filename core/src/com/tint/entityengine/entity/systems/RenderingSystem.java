@@ -23,7 +23,7 @@ public class RenderingSystem  {
     	this.map = map;
     	this.gs = gs;
         shapeRenderer = new ShapeRenderer();
-        entities = gs.getEngine().getEntitiesFor(Family.getFor(RenderComponent.class));
+        entities = gs.getEngine().getEntitiesFor(Family.getFor(RenderComponent.class, PositionComponent.class));
     }
 
     public void render(float frameTime, SpriteBatch batch) {
@@ -39,7 +39,8 @@ public class RenderingSystem  {
             Entity entity = entities.get(i);
             RenderComponent renderComp = Mappers.render.get(entity);
             
-            renderComp.renderer.render(batch, entity, frameTime);
+            PositionComponent posComp = Mappers.position.get(entity);
+            renderComp.renderer.render(batch, entity, posComp, frameTime);
         }
         
         batch.end();

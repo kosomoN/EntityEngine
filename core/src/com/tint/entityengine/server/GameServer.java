@@ -18,6 +18,7 @@ import com.tint.entityengine.GameMap;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
 import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
+import com.tint.entityengine.entity.components.renderers.TextureRenderer;
 import com.tint.entityengine.network.packets.Packet;
 import com.tint.entityengine.server.ServerClient.ClientState;
 import com.tint.entityengine.server.entity.components.AiComponent;
@@ -67,18 +68,34 @@ public class GameServer {
 		
 		server.addListener(serverListener);
 		
-		Entity e = new Entity();
-		PositionComponent pos = new PositionComponent(1900, 1900);
-		e.add(pos);
-		e.add(new NetworkComponent());
-		e.add(new AiComponent(new AiCow(pos)));
+		if(true) {
+			Entity e = new Entity();
+			PositionComponent pos = new PositionComponent(1900, 1900);
+			e.add(pos);
+			e.add(new NetworkComponent());
+			e.add(new AiComponent(new AiCow(pos)));
+			
+			RenderComponent rc = new RenderComponent();
+			rc.renderer = new DirectionalRenderer();
+			((DirectionalRenderer) rc.renderer).animFile = "Cow";
+			e.add(rc);
+			
+			engine.addEntity(e);
+		}
 		
-		RenderComponent rc = new RenderComponent();
-		rc.renderer = new DirectionalRenderer();
-		((DirectionalRenderer) rc.renderer).animFile = "Cow";
-		e.add(rc);
-		
-		engine.addEntity(e);
+		if(true) {
+			Entity e = new Entity();
+			PositionComponent pos = new PositionComponent(1850, 1950);
+			e.add(pos);
+			e.add(new NetworkComponent());
+			
+			RenderComponent rc = new RenderComponent();
+			rc.renderer = new TextureRenderer();
+			((TextureRenderer) rc.renderer).textureFile = "Log";
+			e.add(rc);
+			
+			engine.addEntity(e);
+		}
 	}
 
 	private long lastTickTime;
