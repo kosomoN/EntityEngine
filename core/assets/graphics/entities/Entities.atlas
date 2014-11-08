@@ -1,47 +1,54 @@
 
 Entities.png
-size: 1024,1024
+size: 2048,512
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 Bat anim 32 7 true 150 3
   rotate: false
-  xy: 128, 384
+  xy: 1664, 384
   size: 96, 128
   orig: 96, 128
   offset: 0, 0
   index: -1
-Cow anim 32 7 false 0 1
+Cow anim 64 40 false 0 1
   rotate: false
-  xy: 0, 0
+  xy: 1536, 0
   size: 128, 512
   orig: 128, 512
   offset: 0, 0
   index: -1
+CowEat anim 64 40 true 100 4
+  rotate: false
+  xy: 0, 0
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
 CowWalking anim 64 40 false 100 4
   rotate: false
-  xy: 0, 512
+  xy: 512, 0
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 Log 16 16
   rotate: false
-  xy: 576, 736
+  xy: 1088, 224
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Player anim 32 7 false 0 1
   rotate: false
-  xy: 512, 512
+  xy: 1024, 0
   size: 64, 256
   orig: 64, 256
   offset: 0, 0
   index: -1
 PlayerWalking anim 32 7 false 60 8
   rotate: false
-  xy: 512, 768
+  xy: 1024, 256
   size: 512, 256
   orig: 512, 256
   offset: 0, 0

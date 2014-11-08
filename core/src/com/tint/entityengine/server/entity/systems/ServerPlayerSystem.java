@@ -67,7 +67,6 @@ public class ServerPlayerSystem extends IteratingSystem {
 			float tileY = (float) (y + hitbox.getOffset(i, 1));
 			
 			if(gameServer.getMap().isOnMap(tileX, tileY)) {
-				System.out.println((int) tileX + ", " + (int) tileY + ": " + gameServer.getMap().getTile((int) tileX, (int) tileY, 0));
 				if(gameServer.getMap().isBlocked((int) tileX, (int) tileY, 1)) {
 					float xOverlap = tileX % 1.0f * GameMap.TILE_SIZE;
 					float yOverlap = tileY % 1.0f * GameMap.TILE_SIZE;

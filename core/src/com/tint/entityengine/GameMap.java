@@ -1,7 +1,5 @@
 package com.tint.entityengine;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -46,13 +44,7 @@ public class GameMap {
 				}
 			}
 		}
-		tiles[1][2][5] = 125;
-		
-		blockedIndexes = new short[4];
-		blockedIndexes[0] = 93;
-		blockedIndexes[1] = 94;
-		blockedIndexes[2] = 125;
-		blockedIndexes[3] = 126;
+		blockedIndexes = new short[0];
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -69,7 +61,6 @@ public class GameMap {
 		int endX = (int) (startX + Math.ceil(Camera.orthoCam.viewportWidth / TILE_SIZE) + 1);
 		if(endX < 0) endX = 0;
 		else if(endX >= width) endX = width - 1;
-		
 		int endY = (int) (startY + Math.ceil(Camera.orthoCam.viewportHeight / TILE_SIZE) + 1);
 		if(endY < 0) endY = 0;
 		else if(endY >= height) endY = height - 1;

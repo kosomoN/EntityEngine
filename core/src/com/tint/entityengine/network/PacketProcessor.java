@@ -12,6 +12,8 @@ import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
+import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
+import com.tint.entityengine.entity.components.renderers.Renderer;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.network.packets.MapChunkPacket;
 import com.tint.entityengine.network.packets.Packet;
@@ -54,12 +56,12 @@ public class PacketProcessor {
 							continue;
 						}
 					
-						//If it's the player
-						if(eu.getID() == gs.getPlayer().serverEntityId) {
-							for(Networked c : eu.getComponents()) {
-								if(c instanceof PositionComponent) {
+						for(Networked c : eu.getComponents()) {
+							if(c instanceof PositionComponent) {
+								PositionComponent pos = Mappers.position.get(ent);
+								
+								if(eu.getID() == gs.getPlayer().serverEntityId) {
 									PositionComponent newPos = (PositionComponent) c;
-									PositionComponent pos = Mappers.position.get(ent);
 									
 									//Only apply if the local position is far off
 									float dx = newPos.getX() - pos.getX();
@@ -68,22 +70,14 @@ public class PacketProcessor {
 									if(dx * dx + dy * dy > CORRECTION_THRESHOLD) {
 										pos.set(newPos, gs.getTick());
 									}
-								} else if(c instanceof HealthComponent) {
-									HealthComponent health = Mappers.health.get(ent);
-									health.setHp(((HealthComponent) c).getHp());
-								}
-							}
-							
-							continue;
-						}
-						
-						for(Networked c : eu.getComponents()) {
-							if(c instanceof PositionComponent) {
-								PositionComponent pos = Mappers.position.get(ent);
-								pos.set((PositionComponent) c, gs.getTick());
+								} else 
+									pos.set((PositionComponent) c, gs.getTick());
 							} else if(c instanceof HealthComponent) {
 								HealthComponent health = Mappers.health.get(ent);
 								health.setHp(((HealthComponent) c).getHp());
+								
+							} else if(c instanceof RenderComponent) {
+								Mappers.render.get(ent).renderer.updatePacket(((RenderComponent) c).renderer);
 							}
 						}
 					}

@@ -73,7 +73,7 @@ public class GameServer {
 			PositionComponent pos = new PositionComponent(1900, 1900);
 			e.add(pos);
 			e.add(new NetworkComponent());
-			e.add(new AiComponent(new AiCow(pos)));
+			e.add(new AiComponent(new AiCow(e)));
 			
 			RenderComponent rc = new RenderComponent();
 			rc.renderer = new DirectionalRenderer();

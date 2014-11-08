@@ -13,6 +13,7 @@ public class TextureRenderer implements Renderer {
 	public String textureFile;
 	private transient TextureRegion texture;
 	private transient Vector2 offset;
+	private boolean hasChanged;
 	
 	@Override
 	public void initialize(GameState gs) {
@@ -26,6 +27,28 @@ public class TextureRenderer implements Renderer {
 	@Override
 	public void render(SpriteBatch batch, Entity e, PositionComponent pos, float tickTime) {
 		batch.draw(texture, pos.getLerpX(tickTime) - offset.x, pos.getLerpY(tickTime) - offset.y);
+	}
+
+	@Override
+	public void updatePacket(Renderer renderer) {
+		TextureRenderer newRenderer = (TextureRenderer) renderer;
+		if(!newRenderer.textureFile.equals(textureFile))
+			initialize(null);
+	}
+	
+	public void setTextureFile(String textureFile) {
+		this.textureFile = textureFile;
+		hasChanged = true;
+	}
+
+	@Override
+	public boolean hasChanged() {
+		return hasChanged;
+	}
+
+	@Override
+	public void resetChanged() {
+		hasChanged = false;
 	}
 
 }

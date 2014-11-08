@@ -27,7 +27,6 @@ public class RenderingSystem  {
     }
 
     public void render(float frameTime, SpriteBatch batch) {
-    	
     	PositionComponent playerPos = gs.getPlayer().getPos();
     	Camera.orthoCam.position.set(playerPos.getLerpX(frameTime), playerPos.getLerpY(frameTime), 0);
     	Camera.orthoCam.update();

@@ -16,7 +16,7 @@ public class GameState extends State {
 	private ClientHandler client;
 	private Engine engine;
 	private RenderingSystem renderSystem;
-	private InputProcessor inputProcessor = new InputProcessor();
+	private InputProcessor inputProcessor = new InputProcessor(this);
 	private InputMultiplexer inputMultiplexer;
     public ClientPlayer player;
     private GameMap map;

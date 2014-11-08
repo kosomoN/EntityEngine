@@ -10,13 +10,12 @@ public class RenderComponent extends Component implements Networked {
 	
 	@Override
 	public boolean hasChanged() {
-		//Never need updating
-		return false;
+		return renderer.hasChanged();
 	}
 
 	@Override
 	public void resetChanged() {
-		
+		renderer.resetChanged();
 	}
 
 }

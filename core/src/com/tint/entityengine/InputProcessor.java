@@ -1,31 +1,40 @@
 package com.tint.entityengine;
 
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.*;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.tint.entityengine.network.packets.InputPacket;
-import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.*;
 
 public class InputProcessor extends InputAdapter {
 	
-	private int upKey = Keys.W, downKey = Keys.S, leftKey = Keys.A, rightKey = Keys.D;
+	private int upKey = Keys.W, downKey = Keys.S, leftKey = Keys.A, rightKey = Keys.D, attackKey = Keys.SPACE;
 	private InputPacket inputPacket = new InputPacket();
 	private byte inputState;
 	private boolean changed = false;
+	private GameState gs;
 
+	public InputProcessor(GameState gs) {
+		this.gs = gs;
+	}
+	
 	@Override
 	public boolean keyDown(int keycode) {
 		//Set bit
 		if(keycode == upKey)
 			inputState |= KEY_UP;
 		
-		if(keycode == downKey)
+		else if(keycode == downKey)
 			inputState |= KEY_DOWN;
 		
-		if(keycode == leftKey)
+		else if(keycode == leftKey)
 			inputState |= KEY_LEFT;
 		
-		if(keycode == rightKey)
+		else if(keycode == rightKey)
 			inputState |= KEY_RIGHT;
+		
+		else if(keycode == attackKey)
+			inputState |= KEY_ATTACK;
 		
 		changed = true;
 		
@@ -38,14 +47,17 @@ public class InputProcessor extends InputAdapter {
 		if(keycode == upKey)
 			inputState &= ~KEY_UP;
 		
-		if(keycode == downKey)
+		else if(keycode == downKey)
 			inputState &= ~KEY_DOWN;
 		
-		if(keycode == leftKey)
+		else if(keycode == leftKey)
 			inputState &= ~KEY_LEFT;
 		
-		if(keycode == rightKey)
+		else if(keycode == rightKey)
 			inputState &= ~KEY_RIGHT;
+		
+		else if(keycode == rightKey)
+			inputState &= ~KEY_ATTACK;
 		
 		changed = true;
 		

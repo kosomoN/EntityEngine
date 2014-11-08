@@ -66,7 +66,7 @@ public class ServerClient {
 			
 			playerEntity = new Entity();
 			playerEntity.add(new HitboxComponent(32, 32));
-			playerEntity.add(new PositionComponent((float) (Math.random() * (1000 - 16) + 16), (float) (Math.random() * (600 - 16) + 16)));
+			playerEntity.add(new PositionComponent((float) (Math.random() * (500) + 1200), (float) (Math.random() * (500) + 1200)));
 			playerComponent = new ServerPlayerComponent();
 			playerEntity.add(new HealthComponent(100));
 			
