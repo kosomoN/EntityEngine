@@ -7,17 +7,14 @@ public class HealthComponent extends Component implements Networked {
 
 	private int hp;
 	private int maxHp;
-	private boolean hasChanged;
+	private transient boolean hasChanged;
 	
 	public HealthComponent(int maxHp) {
 		this.hp = this.maxHp = maxHp;
 	}
 	
 	public void addHp(int hp) {
-		this.hp += hp;
-		
-		if(hp != 0)
-			hasChanged = true;
+		setHp(this.hp + hp);
 	}
 	
 	public void setHp(int hp) {

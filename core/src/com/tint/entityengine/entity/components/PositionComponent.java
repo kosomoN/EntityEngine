@@ -111,6 +111,11 @@ public class PositionComponent extends Component implements Networked {
 	public void add(float x, float y, int tick) {
 		set(this.x1 + x, this.y1 + y, tick);
 	}
+	
+	public void add(float x, float y) {
+		x1 += x;
+		y1 += y;
+	}
 
 	@Override
 	public boolean hasChanged() {

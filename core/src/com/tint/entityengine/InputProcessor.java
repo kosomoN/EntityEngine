@@ -56,7 +56,7 @@ public class InputProcessor extends InputAdapter {
 		else if(keycode == rightKey)
 			inputState &= ~KEY_RIGHT;
 		
-		else if(keycode == rightKey)
+		else if(keycode == attackKey)
 			inputState &= ~KEY_ATTACK;
 		
 		changed = true;

@@ -9,8 +9,8 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Settings s = new Settings();
-		s.maxWidth = 1024;
-		s.maxHeight = 1024;
+		s.maxWidth = 2048;
+		s.maxHeight = 2048;
 		s.paddingX = 0;
 		s.paddingY = 0;
 		TexturePacker.process(s, "unpacked/entities", "graphics/entities", "Entities");
@@ -19,7 +19,7 @@ public class DesktopLauncher {
 		config.width = 1280;
 		config.height = 720;
 		config.vSyncEnabled = false;
-		config.foregroundFPS = 0;
+		//config.foregroundFPS = 0;
 		new LwjglApplication(new Launcher(), config);
 	}
 }

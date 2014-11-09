@@ -3,12 +3,8 @@ package com.tint.entityengine.network.packets;
 import java.util.ArrayList;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.tint.entityengine.entity.components.HealthComponent;
-import com.tint.entityengine.entity.components.HitboxComponent;
-import com.tint.entityengine.entity.components.PositionComponent;
-import com.tint.entityengine.entity.components.RenderComponent;
-import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
-import com.tint.entityengine.entity.components.renderers.TextureRenderer;
+import com.tint.entityengine.entity.components.*;
+import com.tint.entityengine.entity.components.renderers.*;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
 
 public abstract class Packet {
@@ -31,7 +27,9 @@ public abstract class Packet {
 		kryo.register(short[][].class);
 		
 		kryo.register(PositionComponent.class);
-		kryo.register(HitboxComponent.class);
+		kryo.register(CollisionComponent.class);
+		kryo.register(StaticCollisionComponent.class);
+		kryo.register(AttackHitbox.class);
 		kryo.register(HealthComponent.class);
 		kryo.register(NetworkComponent.class);
 		

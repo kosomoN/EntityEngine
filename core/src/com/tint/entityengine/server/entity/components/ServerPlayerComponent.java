@@ -7,6 +7,7 @@ public class ServerPlayerComponent extends Component {
 	
 	public static final byte KEY_UP = 1, KEY_DOWN = 2, KEY_LEFT = 4, KEY_RIGHT = 8, KEY_ATTACK = 16;
 	public byte inputState;
+	private int direction;
 
 	public boolean getKey(byte key) {
 		//AND operator to check one bit

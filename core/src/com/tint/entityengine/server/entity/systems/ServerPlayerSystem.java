@@ -1,5 +1,6 @@
 package com.tint.entityengine.server.entity.systems;
 
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_ATTACK;
 import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_DOWN;
 import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_LEFT;
 import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_RIGHT;
@@ -9,9 +10,10 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.tint.entityengine.GameMap;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.tint.entityengine.Mappers;
-import com.tint.entityengine.entity.components.HitboxComponent;
+import com.tint.entityengine.entity.components.AttackHitbox;
+import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.server.GameServer;
 import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
@@ -58,13 +60,17 @@ public class ServerPlayerSystem extends IteratingSystem {
 		if(pl.getKey(KEY_RIGHT))
 			testX += pl.getSpeed() * modifier;
 		
-		HitboxComponent hitbox = Mappers.hitbox.get(entity);
+		if(pl.getKey(KEY_ATTACK))
+			attack(entity, pos, testX - newX, testY - newY); //Will be replaced with weapons
+		else
+			hasAttacked = false;
+			
+		/*
+		CollisionHitbox hitbox = Mappers.collisonHitbox.get(entity);
 		
 		for(int i = 0; i < 4; i++) {
-			float x = (float) (testX / GameMap.TILE_SIZE);
-			float y = (float) (testY / GameMap.TILE_SIZE);
-			float tileX = (float) (x + hitbox.getOffset(i, 0));
-			float tileY = (float) (y + hitbox.getOffset(i, 1));
+			float tileX = (testX + hitbox.getOffset(i, 0)) / GameMap.TILE_SIZE;
+			float tileY = (testY + hitbox.getOffset(i, 1)) / GameMap.TILE_SIZE;
 			
 			if(gameServer.getMap().isOnMap(tileX, tileY)) {
 				if(gameServer.getMap().isBlocked((int) tileX, (int) tileY, 1)) {
@@ -88,25 +94,82 @@ public class ServerPlayerSystem extends IteratingSystem {
 				
 				newX = testX;
 				newY = testY;
-			} else {
+			}
+			
+			//Edges of the map, will be removed when endless maps are created
+			else {
 				if(tileX < 0)
-					newX = 16;
+					newX = hitbox.getWidth() / 2;
 				else if(tileX >= gameServer.getMap().getWidth())
-					newX = gameServer.getMap().getWidth() - 16;
+					newX = gameServer.getMap().getWidth() * GameMap.TILE_SIZE - hitbox.getWidth() / 2;
 				else
 					newX = testX;
 				
 				if(tileY < 0)
-					newY = 16;
+					newY = hitbox.getHeight() / 2;
 				else if(tileY >= gameServer.getMap().getHeight())
-					newY = gameServer.getMap().getHeight() - 16;
+					newY = gameServer.getMap().getHeight() * GameMap.TILE_SIZE - hitbox.getHeight() / 2;
 				else
 					newY = testY;
 				break;
 			}
-		}
-		
+		}*/
+		newX = testX;
+		newY = testY;
 		pos.set(newX, newY, gameServer.getTicks());
+	}
+
+	private boolean hasAttacked = false;
+	//Delta used for direction
+	private void attack(Entity player, PositionComponent pos, float dx, float dy) {
+		if(!hasAttacked) {
+			hasAttacked = true;
+			
+			ImmutableArray<Entity> hittableEntites = gameServer.getEngine().getEntitiesFor(Family.getFor(AttackHitbox.class));
+			
+			//TODO Add broad-phase
+			for(int i = 0; i < hittableEntites.size(); i++) {
+				Entity e = hittableEntites.get(i);
+				if(e != player) {
+					AttackHitbox hitbox = Mappers.attackHitbox.get(e);
+					PositionComponent hitPos = Mappers.position.get(e);
+					
+					float minX = 0, minY = 0, maxX = 0, maxY = 0;
+					
+					
+					if(dx > 0) {
+						minX = pos.getX();
+						maxX = pos.getX() + 40;
+						
+						minY = pos.getY() - 17;
+						maxY = pos.getY() + 17;
+						
+					} else if(dx < 0) {
+						
+					} else {
+						if(dy > 0) {
+							
+						} else {
+							
+						}
+					}
+					
+					if(hitPos.getX() + hitbox.getWidth() / 2 + hitbox.getOffsetX() < minX)
+						continue;
+					
+					if(hitPos.getY() + hitbox.getHeight() / 2 + hitbox.getOffsetY() < minY)
+						continue;
+					
+					if(hitPos.getX() - hitbox.getWidth() / 2 + hitbox.getOffsetX() > maxX)
+						continue;
+					
+					if(hitPos.getY() - hitbox.getHeight() / 2 + hitbox.getOffsetY() > maxY)
+						continue;
+					
+					Mappers.health.get(e).addHp(-10);
+				}
+			}
+		}
 	}
 
 }

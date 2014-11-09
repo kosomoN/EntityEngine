@@ -12,8 +12,7 @@ import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
-import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
-import com.tint.entityengine.entity.components.renderers.Renderer;
+import com.tint.entityengine.entity.systems.RenderingSystem;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.network.packets.MapChunkPacket;
 import com.tint.entityengine.network.packets.Packet;
@@ -24,7 +23,7 @@ import com.tint.entityengine.server.entity.components.Networked;
 
 public class PacketProcessor {
 
-	private static final float CORRECTION_THRESHOLD = 60 * 60;
+	private static final float CORRECTION_THRESHOLD = 60 * 60, SMOOTH_CORRECTION_THRESHOLD = 10 * 10, SMOOTHING_SPEED = 0.04f;
 	private GameState gs;
 	private Queue<Packet> packets = new ConcurrentLinkedQueue<Packet>();
 	private int lastUpdatePacketTick = -1;
@@ -63,12 +62,21 @@ public class PacketProcessor {
 								if(eu.getID() == gs.getPlayer().serverEntityId) {
 									PositionComponent newPos = (PositionComponent) c;
 									
+									RenderingSystem.serverPlayerPos.x = newPos.getX();
+									RenderingSystem.serverPlayerPos.y = newPos.getY();
+									
 									//Only apply if the local position is far off
 									float dx = newPos.getX() - pos.getX();
 									float dy = newPos.getY() - pos.getY();
 									
-									if(dx * dx + dy * dy > CORRECTION_THRESHOLD) {
+									float dist = dx * dx + dy * dy;
+									
+									if(dist > CORRECTION_THRESHOLD) {
 										pos.set(newPos, gs.getTick());
+										
+										//Only apply smoothing if the player is moving
+									} else if(dist > SMOOTH_CORRECTION_THRESHOLD && (pos.getLerpX(gs.getTick()) != pos.getX() || pos.getLerpY(gs.getTick()) != pos.getY())) {
+										pos.add(dx * SMOOTHING_SPEED, dy * SMOOTHING_SPEED);
 									}
 								} else 
 									pos.set((PositionComponent) c, gs.getTick());
@@ -78,6 +86,8 @@ public class PacketProcessor {
 								
 							} else if(c instanceof RenderComponent) {
 								Mappers.render.get(ent).renderer.updatePacket(((RenderComponent) c).renderer);
+							} else {
+								Log.info("Unprocessed component: " + c);
 							}
 						}
 					}
@@ -111,6 +121,8 @@ public class PacketProcessor {
 			else if(p instanceof MapChunkPacket) {
 				Log.info("Recived MapChunk");
 				gs.getMap().chunkRecived((MapChunkPacket) p);
+			} else {
+				Log.info("Unprocessed packet: " + p);
 			}
 		}
 		

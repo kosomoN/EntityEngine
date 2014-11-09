@@ -34,7 +34,7 @@ CowWalking anim 64 40 false 100 4
   index: -1
 Log 16 16
   rotate: false
-  xy: 1088, 224
+  xy: 1664, 352
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -51,5 +51,12 @@ PlayerWalking anim 32 7 false 60 8
   xy: 1024, 256
   size: 512, 256
   orig: 512, 256
+  offset: 0, 0
+  index: -1
+Tree 48 26
+  rotate: false
+  xy: 1088, 128
+  size: 96, 128
+  orig: 96, 128
   offset: 0, 0
   index: -1
