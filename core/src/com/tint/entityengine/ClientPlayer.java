@@ -1,5 +1,6 @@
 package com.tint.entityengine;
 
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_ATTACK;
 import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_DOWN;
 import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_LEFT;
 import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_RIGHT;
@@ -8,10 +9,12 @@ import static com.tint.entityengine.server.entity.components.ServerPlayerCompone
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.CollisionComponent;
+import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.StaticCollisionComponent;
+import com.tint.entityengine.entity.components.renderers.PlayerRenderer;
+import com.tint.entityengine.entity.components.renderers.PlayerRenderer.PlayerState;
 
 public class ClientPlayer {
 	private static final float DIAG_MOD = (float) Math.sqrt(0.5);
@@ -73,53 +76,10 @@ public class ClientPlayer {
 		
 		if(in.getKey(KEY_RIGHT))
 			testX += speed * modifier;
-		/*
-		for(int i = 0; i < 4; i++) {
-			float tileX = (testX + hitbox.getOffset(i, 0)) / GameMap.TILE_SIZE;
-			float tileY = (testY + hitbox.getOffset(i, 1)) / GameMap.TILE_SIZE;
-			
-			if(gs.getMap().isOnMap(tileX, tileY)) {
-				if(gs.getMap().isBlocked((int) tileX, (int) tileY, 1)) {
-					float xOverlap = tileX % 1.0f * GameMap.TILE_SIZE;
-					float yOverlap = tileY % 1.0f * GameMap.TILE_SIZE;
-					
-					if(hitbox.getOffset(i, 0) < 0)
-						xOverlap = -(GameMap.TILE_SIZE - xOverlap);
-					
-					if(hitbox.getOffset(i, 1) < 0)
-						yOverlap = -(GameMap.TILE_SIZE - yOverlap);
-					
-					//Fix player getting stuck in walls
-					if(Math.abs(xOverlap) == Math.abs(yOverlap) && yOverlap > 0) {
-						testX -= xOverlap;
-					} else if(Math.abs(xOverlap) < Math.abs(yOverlap))
-						testX -= xOverlap;
-					else
-						testY -= yOverlap;
-				}
-				
-				newX = testX;
-				newY = testY;
-			} 
-			
-			//Edges of the map, will be removed when endless maps are created
-			else {
-				if(tileX < 0)
-					newX = hitbox.getWidth() / 2;
-				else if(tileX >= gs.getMap().getWidth())
-					newX = gs.getMap().getWidth() * GameMap.TILE_SIZE - hitbox.getWidth() / 2;
-				else
-					newX = testX;
-				
-				if(tileY < 0)
-					newY = hitbox.getHeight() / 2;
-				else if(tileY >= gs.getMap().getHeight())
-					newY = gs.getMap().getHeight() * GameMap.TILE_SIZE - hitbox.getHeight() / 2;
-				else
-					newY = testY;
-				break;
-			}
-		}*/
+		
+		if(in.getKey(KEY_ATTACK)) {
+			((PlayerRenderer) Mappers.render.get(entity).renderer).setPlayerState(PlayerState.ATTACKING);
+		}
 		
 		for(int j = 0; j < staticEntities.size(); j++) {
 			Entity staticEnt = staticEntities.get(j);

@@ -13,7 +13,6 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.AttackHitbox;
-import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.server.GameServer;
 import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
@@ -65,55 +64,6 @@ public class ServerPlayerSystem extends IteratingSystem {
 		else
 			hasAttacked = false;
 			
-		/*
-		CollisionHitbox hitbox = Mappers.collisonHitbox.get(entity);
-		
-		for(int i = 0; i < 4; i++) {
-			float tileX = (testX + hitbox.getOffset(i, 0)) / GameMap.TILE_SIZE;
-			float tileY = (testY + hitbox.getOffset(i, 1)) / GameMap.TILE_SIZE;
-			
-			if(gameServer.getMap().isOnMap(tileX, tileY)) {
-				if(gameServer.getMap().isBlocked((int) tileX, (int) tileY, 1)) {
-					float xOverlap = tileX % 1.0f * GameMap.TILE_SIZE;
-					float yOverlap = tileY % 1.0f * GameMap.TILE_SIZE;
-					
-					if(hitbox.getOffset(i, 0) < 0)
-						xOverlap = -(GameMap.TILE_SIZE - xOverlap);
-					
-					if(hitbox.getOffset(i, 1) < 0)
-						yOverlap = -(GameMap.TILE_SIZE - yOverlap);
-					
-					//Fix player getting stuck in walls
-					if(Math.abs(xOverlap) == Math.abs(yOverlap) && yOverlap > 0) {
-						testX -= xOverlap;
-					} else if(Math.abs(xOverlap) < Math.abs(yOverlap))
-						testX -= xOverlap;
-					else
-						testY -= yOverlap;
-				}
-				
-				newX = testX;
-				newY = testY;
-			}
-			
-			//Edges of the map, will be removed when endless maps are created
-			else {
-				if(tileX < 0)
-					newX = hitbox.getWidth() / 2;
-				else if(tileX >= gameServer.getMap().getWidth())
-					newX = gameServer.getMap().getWidth() * GameMap.TILE_SIZE - hitbox.getWidth() / 2;
-				else
-					newX = testX;
-				
-				if(tileY < 0)
-					newY = hitbox.getHeight() / 2;
-				else if(tileY >= gameServer.getMap().getHeight())
-					newY = gameServer.getMap().getHeight() * GameMap.TILE_SIZE - hitbox.getHeight() / 2;
-				else
-					newY = testY;
-				break;
-			}
-		}*/
 		newX = testX;
 		newY = testY;
 		pos.set(newX, newY, gameServer.getTicks());

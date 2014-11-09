@@ -1,5 +1,7 @@
 package com.tint.entityengine.server;
 
+import static com.tint.entityengine.GameMap.CHUNK_SIZE;
+import static com.tint.entityengine.GameMap.LAYERS;
 import static com.tint.entityengine.server.ServerClient.ClientState.CONNECTING;
 import static com.tint.entityengine.server.ServerClient.ClientState.IN_GAME;
 
@@ -13,15 +15,13 @@ import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.CollisionComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
-import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
+import com.tint.entityengine.entity.components.renderers.PlayerRenderer;
 import com.tint.entityengine.network.packets.ConnectionApprovedPacket;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.network.packets.MapChunkPacket;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
 import com.tint.entityengine.server.entity.components.Networked;
 import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
-
-import static com.tint.entityengine.GameMap.*;
 
 public class ServerClient {
 	public enum ClientState { CONNECTING, IN_GAME; }
@@ -73,8 +73,12 @@ public class ServerClient {
 			playerEntity.add(new HealthComponent(100));
 			
 			RenderComponent rc = new RenderComponent();
+			rc.renderer = new PlayerRenderer();
+			String[] anims = {"Player", "PlayerWalking", "PlayerAttacking"};
+			((PlayerRenderer) rc.renderer).setPlayerAnims(anims);
+			/*
 			rc.renderer = new DirectionalRenderer();
-			((DirectionalRenderer) rc.renderer).animFile = "Player";
+			((DirectionalRenderer) rc.renderer).animFile = "Player";*/
 			playerEntity.add(rc);
 			
 			playerEntity.add(new NetworkComponent());
