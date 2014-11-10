@@ -5,13 +5,13 @@ import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
 
-public class AiCow implements AiController {
+public class AiAnimal implements AiController {
 
 	private PositionComponent position;
 	private int dir;
 	private Entity entity;
 	
-	public AiCow(Entity entity) {
+	public AiAnimal(Entity entity) {
 		this.position = Mappers.position.get(entity);
 		this.entity = entity;
 	}
@@ -33,7 +33,8 @@ public class AiCow implements AiController {
 			else if(dir == 3)
 				position.add(-3, 0, -1);
 		} else if(tickMod == 60) {
-			((DirectionalRenderer) Mappers.render.get(entity).renderer).setCustomAnimString("CowEat");
+			DirectionalRenderer renderer = (DirectionalRenderer) Mappers.render.get(entity).renderer;
+			renderer.setCustomAnimString(renderer.animFile + "Eat", 2);
 		}
 	}
 	

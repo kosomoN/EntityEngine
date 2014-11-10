@@ -4,8 +4,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.tint.entityengine.Assets;
+import com.tint.entityengine.GameMap;
 import com.tint.entityengine.GameState;
 import com.tint.entityengine.entity.components.PositionComponent;
 
@@ -24,6 +26,7 @@ public class DirectionalRenderer implements Renderer {
 	private transient Animation[] customAnim;
 	private transient Vector2 customAnimOffset;
 	private transient int customAnimStart;
+	private int customAnimRepeatTimes;
 	
 	//Just to make the animations not exactly synchronized
 	private transient float animTimeOffset;
@@ -75,19 +78,26 @@ public class DirectionalRenderer implements Renderer {
 
 			if(walkingAnims != null && customAnim == null) {
 				batch.draw(walkingAnims[dir].getKeyFrame(tickTime * GameState.TICK_LENGTH + animTimeOffset, true), lerpX - offset.x, lerpY - offset.y);
-				return;
+				return;			
 			}
 		}
 
 		if(customAnim != null) {
 			float animTime = (gs.getTick() - customAnimStart) * GameState.TICK_LENGTH;
+			float checkAnimTime = animTime;
+			
 			if(customAnim[dir].getPlayMode() == PlayMode.LOOP_PINGPONG) {
 				//Ping pong animations are double the length minus one frame
-				if(customAnim[dir].isAnimationFinished(animTime / 2 + customAnim[dir].getFrameDuration()))
-					customAnim = null;
-			} else if(customAnim[dir].isAnimationFinished(animTime))
-				customAnim = null;
+				checkAnimTime = animTime / 2 + customAnim[dir].getFrameDuration();
+				
+				checkAnimTime += (customAnim[dir].getAnimationDuration() - customAnim[dir].getFrameDuration()) * 2 * customAnimRepeatTimes;
+			} else {
+				checkAnimTime /= customAnimRepeatTimes;
+			}
 			
+			if(customAnim[dir].isAnimationFinished(checkAnimTime))
+				customAnim = null;
+				
 			if(customAnim != null) {
 				batch.draw(customAnim[dir].getKeyFrame(animTime, true), lerpX - customAnimOffset.x, lerpY - customAnimOffset.y);
 				return;
@@ -95,13 +105,16 @@ public class DirectionalRenderer implements Renderer {
 		}
 
 		batch.draw(anims[dir].getKeyFrame(tickTime * GameState.TICK_LENGTH + animTimeOffset, true), lerpX - offset.x, lerpY - offset.y);
+		
+		
 	}
 	
-	public void playCustomAnim(String anim) {
+	public void playCustomAnim(String anim, int repeatTimes) {
 		customAnimString = anim;
 		customAnim = Assets.getDirectionAnims(anim);
 		customAnimOffset = Assets.getAnimOffset(anim);
 		customAnimStart = gs.getTick();
+		customAnimRepeatTimes = repeatTimes;
 	}
 
 	@Override
@@ -109,14 +122,15 @@ public class DirectionalRenderer implements Renderer {
 		DirectionalRenderer newRenderer = (DirectionalRenderer) renderer;
 		
 		if(newRenderer.customAnimString != null) 
-			playCustomAnim(newRenderer.customAnimString);
+			playCustomAnim(newRenderer.customAnimString, newRenderer.customAnimRepeatTimes);
 		
 		if(!newRenderer.animFile.equals(animFile))
 			initialize(gs);
 	}
 	
-	public void setCustomAnimString(String customAnim) {
+	public void setCustomAnimString(String customAnim, int repeatTimes) {
 		this.customAnimString = customAnim;
+		customAnimRepeatTimes = repeatTimes;
 		hasChanged = true;
 	}
 

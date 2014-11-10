@@ -25,7 +25,7 @@ import com.tint.entityengine.network.packets.Packet;
 import com.tint.entityengine.server.ServerClient.ClientState;
 import com.tint.entityengine.server.entity.components.AiComponent;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
-import com.tint.entityengine.server.entity.components.ai.AiCow;
+import com.tint.entityengine.server.entity.components.ai.AiAnimal;
 import com.tint.entityengine.server.entity.systems.AiSystem;
 import com.tint.entityengine.server.entity.systems.ServerCollisionSystem;
 import com.tint.entityengine.server.entity.systems.ServerNetworkSystem;
@@ -77,11 +77,11 @@ public class GameServer {
 			PositionComponent pos = new PositionComponent(1900, 1900);
 			e.add(pos);
 			e.add(new NetworkComponent());
-			e.add(new AiComponent(new AiCow(e)));
+			e.add(new AiComponent(new AiAnimal(e)));
 			
 			RenderComponent rc = new RenderComponent();
 			rc.renderer = new DirectionalRenderer();
-			((DirectionalRenderer) rc.renderer).animFile = "Cow";
+			((DirectionalRenderer) rc.renderer).animFile = "Chicken";
 			e.add(rc);
 			
 			engine.addEntity(e);
