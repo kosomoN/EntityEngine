@@ -8,7 +8,6 @@ import com.tint.entityengine.entity.components.CollisionComponent;
 import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
-import com.tint.entityengine.entity.components.StaticCollisionComponent;
 import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
 import com.tint.entityengine.entity.components.renderers.PlayerRenderer;
 import com.tint.entityengine.entity.components.renderers.TextureRenderer;
@@ -37,7 +36,6 @@ public abstract class Packet {
 		
 		kryo.register(PositionComponent.class);
 		kryo.register(CollisionComponent.class);
-		kryo.register(StaticCollisionComponent.class);
 		kryo.register(AttackHitbox.class);
 		kryo.register(HealthComponent.class);
 		kryo.register(NetworkComponent.class);

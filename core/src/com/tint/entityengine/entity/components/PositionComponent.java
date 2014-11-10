@@ -1,6 +1,10 @@
 package com.tint.entityengine.entity.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.tint.entityengine.Mappers;
+import com.tint.entityengine.entity.EntityGrid;
 import com.tint.entityengine.server.entity.components.Networked;
 
 public class PositionComponent extends Component implements Networked {
@@ -108,8 +112,62 @@ public class PositionComponent extends Component implements Networked {
 		hasChanged = true;
 	}
 	
+	
+	//Plz no hate
+	public void set(float x, float y, int tick, boolean checkCollision, Entity entity) {
+		set(x, y, tick);
+		if(checkCollision) {
+			ImmutableArray<Entity> entities = EntityGrid.get(this);
+			for(int i = 0; i < entities.size(); i++) {
+				CollisionComponent dynCollision = Mappers.dynamicCollision.get(entity);
+				
+				Entity staticEnt = entities.get(i);
+				if(staticEnt == entity)
+					continue;
+				PositionComponent staticPos = Mappers.position.get(staticEnt);
+				CollisionComponent staticCollision = Mappers.dynamicCollision.get(staticEnt);
+				
+				if(x1 + dynCollision.getOffset(0, 0) < staticPos.getX() + staticCollision.getOffset(2, 0))
+					continue;
+				
+				if(y1 + dynCollision.getOffset(0, 1) < staticPos.getY() + staticCollision.getOffset(2, 1))
+					continue;
+				
+				if(x1 + dynCollision.getOffset(2, 0) > staticPos.getX() + staticCollision.getOffset(0, 0))
+					continue;
+				
+				if(y1 + dynCollision.getOffset(2, 1) > staticPos.getY() + staticCollision.getOffset(0, 1))
+					continue;
+				
+				float overlapX = x1 - staticPos.getX();
+				if(overlapX < 0)
+					overlapX += (dynCollision.getWidth() / 2 + staticCollision.getWidth() / 2);
+				else
+					overlapX -= (dynCollision.getWidth() / 2 + staticCollision.getWidth() / 2);
+				
+				
+				float overlapY = y1 - staticPos.getY();
+				if(overlapY < 0)
+					overlapY += (dynCollision.getHeight() / 2 + staticCollision.getHeight() / 2);
+				else
+					overlapY -= (dynCollision.getHeight() / 2 + staticCollision.getHeight() / 2);
+				
+				
+				if(Math.abs(overlapX) < Math.abs(overlapY)) {
+					x1 -= overlapX;
+				} else {
+					y1 -= overlapY;
+				}
+			}
+		}
+	}
+	
 	public void add(float x, float y, int tick) {
 		set(this.x1 + x, this.y1 + y, tick);
+	}
+	
+	public void add(float x, float y, int tick, boolean checkCollision, Entity entity) {
+		set(this.x1 + x, this.y1 + y, tick, checkCollision, entity);
 	}
 	
 	public void add(float x, float y) {

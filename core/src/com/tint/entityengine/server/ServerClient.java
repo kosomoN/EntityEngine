@@ -105,7 +105,7 @@ public class ServerClient {
 							}
 						}
 						mcp.layer = l;
-						connection.sendTCP(mcp);
+						//connection.sendTCP(mcp);
 					}
 				}
 			}

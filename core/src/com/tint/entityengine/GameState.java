@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
+import com.tint.entityengine.entity.EntityGrid;
 import com.tint.entityengine.entity.systems.RenderingSystem;
 import com.tint.entityengine.network.ClientHandler;
 import com.tint.entityengine.states.State;
@@ -28,6 +29,7 @@ public class GameState extends State {
     public GameState(Launcher launcher) {
         super(launcher);
         engine = new Engine();
+        EntityGrid.init(engine);
         
         //PLZ MOVE LOADING
         try {

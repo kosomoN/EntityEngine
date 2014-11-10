@@ -63,10 +63,10 @@ public class ServerPlayerSystem extends IteratingSystem {
 			attack(entity, pos, testX - newX, testY - newY); //Will be replaced with weapons
 		else
 			hasAttacked = false;
-			
+
 		newX = testX;
 		newY = testY;
-		pos.set(newX, newY, gameServer.getTicks());
+		pos.set(newX, newY, gameServer.getTicks(), true, entity);
 	}
 
 	private boolean hasAttacked = false;

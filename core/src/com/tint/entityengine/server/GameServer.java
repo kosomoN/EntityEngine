@@ -15,10 +15,10 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.JsonSerialization;
 import com.esotericsoftware.kryonet.Server;
 import com.tint.entityengine.GameMap;
+import com.tint.entityengine.entity.EntityGrid;
 import com.tint.entityengine.entity.components.CollisionComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
-import com.tint.entityengine.entity.components.StaticCollisionComponent;
 import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
 import com.tint.entityengine.entity.components.renderers.TextureRenderer;
 import com.tint.entityengine.network.packets.Packet;
@@ -27,7 +27,6 @@ import com.tint.entityengine.server.entity.components.AiComponent;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
 import com.tint.entityengine.server.entity.components.ai.AiAnimal;
 import com.tint.entityengine.server.entity.systems.AiSystem;
-import com.tint.entityengine.server.entity.systems.ServerCollisionSystem;
 import com.tint.entityengine.server.entity.systems.ServerNetworkSystem;
 import com.tint.entityengine.server.entity.systems.ServerPlayerSystem;
 
@@ -53,7 +52,9 @@ public class GameServer {
 		engine.addSystem(new ServerPlayerSystem(this));
 		engine.addSystem(new ServerNetworkSystem(this));
 		engine.addSystem(new AiSystem(this));
-		engine.addSystem(new ServerCollisionSystem());
+		//engine.addSystem(new ServerCollisionSystem());
+		
+		EntityGrid.init(engine);
 		
 		loadMap();
 		
@@ -78,6 +79,7 @@ public class GameServer {
 			e.add(pos);
 			e.add(new NetworkComponent());
 			e.add(new AiComponent(new AiAnimal(e)));
+			e.add(new CollisionComponent(20, 16));
 			
 			RenderComponent rc = new RenderComponent();
 			rc.renderer = new DirectionalRenderer();
@@ -92,7 +94,7 @@ public class GameServer {
 			PositionComponent pos = new PositionComponent(1850, 1950);
 			e.add(pos);
 			e.add(new NetworkComponent());
-			e.add(new StaticCollisionComponent(24, 14));
+			e.add(new CollisionComponent(24, 14));
 			
 			RenderComponent rc = new RenderComponent();
 			rc.renderer = new TextureRenderer();

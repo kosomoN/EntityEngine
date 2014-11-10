@@ -17,7 +17,6 @@ import com.tint.entityengine.entity.components.CollisionComponent;
 import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
-import com.tint.entityengine.entity.components.StaticCollisionComponent;
 
 public class RenderingSystem  {
 
@@ -75,6 +74,12 @@ public class RenderingSystem  {
             
             PositionComponent posComp = Mappers.position.get(entity);
             renderComp.renderer.render(batch, entity, posComp, frameTime);
+            
+            HealthComponent health = Mappers.health.get(entity);
+            
+            if(health != null) {
+            	font.draw(batch, health.getHp() + "/" + health.getMaxHp(), posComp.getLerpX(frameTime), posComp.getLerpY(frameTime) + 50);
+            }
         }
         
         batch.end();
@@ -101,16 +106,6 @@ public class RenderingSystem  {
 		            if(renderServerPos && entity != gs.getPlayer().getEntity())
 		            	shapeRenderer.rect(pos.getX() - width / 2, pos.getY() - height / 2, width, height);
 	            }
-	            
-	            StaticCollisionComponent staticCollision = Mappers.staticCollision.get(entity);
-	            if(staticCollision != null) {
-	            	shapeRenderer.setColor(0.2f, 0.2f, 1f, 1);
-		            
-	            	int width = staticCollision.getWidth();
-		            int height = staticCollision.getHeight();
-		            shapeRenderer.rect(pos.getLerpX(frameTime) - width / 2, pos.getLerpY(frameTime) - height / 2, width, height);
-	            }
-	            
 	            
 	            AttackHitbox attackHitbox = Mappers.attackHitbox.get(entity);
 	            if(attackHitbox != null) {

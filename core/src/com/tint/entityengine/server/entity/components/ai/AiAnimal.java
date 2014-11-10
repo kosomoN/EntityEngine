@@ -25,13 +25,13 @@ public class AiAnimal implements AiController {
 			
 			
 			if(dir == 0)
-				position.add(0, 3, -1);
+				position.add(0, 3, -1, true, entity);
 			else if(dir == 1)
-				position.add(3, 0, -1);
+				position.add(3, 0, -1, true, entity);
 			else if(dir == 2)
-				position.add(0, -3, -1);
+				position.add(0, -3, -1, true, entity);
 			else if(dir == 3)
-				position.add(-3, 0, -1);
+				position.add(-3, 0, -1, true, entity);
 		} else if(tickMod == 60) {
 			DirectionalRenderer renderer = (DirectionalRenderer) Mappers.render.get(entity).renderer;
 			renderer.setCustomAnimString(renderer.animFile + "Eat", 2);
