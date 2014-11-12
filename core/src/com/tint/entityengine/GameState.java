@@ -43,7 +43,7 @@ public class GameState extends State {
         map = new GameMap(128, 128, "graphics/terrain.png");
         renderSystem = new RenderingSystem(this, map);
 
-	    client = new ClientHandler(this);
+	    client = new ClientHandler(this, launcher);
 	    
 	    hud = new GameHud(launcher.batch);
 	    
@@ -62,11 +62,6 @@ public class GameState extends State {
 			
 			accumulatedTicks--;
 			ticks++;
-		}
-		
-		if(Mappers.health.get(player.getEntity()).getHp() <= 0) {
-			client.getClient().close();
-			Gdx.app.exit();
 		}
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

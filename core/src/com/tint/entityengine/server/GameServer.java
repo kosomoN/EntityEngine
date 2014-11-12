@@ -16,7 +16,9 @@ import com.esotericsoftware.kryonet.JsonSerialization;
 import com.esotericsoftware.kryonet.Server;
 import com.tint.entityengine.GameMap;
 import com.tint.entityengine.entity.EntityGrid;
+import com.tint.entityengine.entity.components.AttackHitbox;
 import com.tint.entityengine.entity.components.CollisionComponent;
+import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
 import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
@@ -85,6 +87,8 @@ public class GameServer {
 			rc.renderer = new DirectionalRenderer();
 			((DirectionalRenderer) rc.renderer).animFile = "Chicken";
 			e.add(rc);
+			e.add(new HealthComponent(20, this, e));
+			e.add(new AttackHitbox(20, 20, 0, 4));
 			
 			engine.addEntity(e);
 		}

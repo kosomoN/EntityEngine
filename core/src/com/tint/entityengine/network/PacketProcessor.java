@@ -83,7 +83,6 @@ public class PacketProcessor {
 							} else if(c instanceof HealthComponent) {
 								HealthComponent health = Mappers.health.get(ent);
 								health.setHp(((HealthComponent) c).getHp());
-								
 							} else if(c instanceof RenderComponent) {
 								Mappers.render.get(ent).renderer.updatePacket(((RenderComponent) c).renderer);
 							} else {

@@ -13,7 +13,7 @@ import com.tint.entityengine.entity.components.PositionComponent;
 
 public class DirectionalRenderer implements Renderer {
 
-	public static final int N = 0, E = 1, S = 2, W = 3;
+	public static final int N = 0, W = 1, S = 2, E = 3;
 	
 	private transient Animation[] anims;
 	private transient Animation[] walkingAnims;
@@ -66,9 +66,9 @@ public class DirectionalRenderer implements Renderer {
 			//Calculate direction. Remove some to show sideways when going diagonally
 			if(Math.abs(dx) >= Math.abs(dy) - 0.01) {
 				if(dx > 0)
-					dir = W;
-				else
 					dir = E;
+				else
+					dir = W;
 			} else {
 				if(dy > 0)
 					dir = N;

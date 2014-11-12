@@ -8,11 +8,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tint.entityengine.states.ConnectionState;
+import com.tint.entityengine.states.MainmenuState;
 import com.tint.entityengine.states.State;
 
 public class Launcher extends Game {
 	
-	public enum States { GAMESTATE, CONNECTIONSTATE };
+	public enum States { GAMESTATE, CONNECTIONSTATE, MAINMENUSTATE };
 	
 	public Map<States, State> states = new EnumMap<States, State>(States.class);
 	
@@ -32,6 +33,7 @@ public class Launcher extends Game {
 		// Loading states
 		states.put(States.GAMESTATE, new GameState(this));
 		states.put(States.CONNECTIONSTATE, new ConnectionState(this));
+		states.put(States.MAINMENUSTATE, new MainmenuState(this));
 	}
 	
 	public void enterState(States state) {

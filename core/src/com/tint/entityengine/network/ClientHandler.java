@@ -5,7 +5,11 @@ import java.util.Map;
 
 import com.badlogic.ashley.core.Entity;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import com.tint.entityengine.GameState;
+import com.tint.entityengine.Launcher;
+import com.tint.entityengine.Launcher.States;
 import com.tint.entityengine.network.packets.Packet;
 
 public class ClientHandler {
@@ -14,11 +18,18 @@ public class ClientHandler {
 	
 	private PacketProcessor processor;
 
-	public ClientHandler(GameState gs) {
+	public ClientHandler(GameState gs, final Launcher launcher) {
 		processor = new PacketProcessor(gs);
 		
 		client = new Client();
 		Packet.register(client.getKryo());
+		client.addListener(new Listener(){
+
+			@Override
+			public void disconnected(Connection connection) {
+				launcher.enterState(States.MAINMENUSTATE);
+			}
+		});
 		
 	}
 	

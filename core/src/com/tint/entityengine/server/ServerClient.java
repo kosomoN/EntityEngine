@@ -70,7 +70,7 @@ public class ServerClient {
 			playerEntity.add(new AttackHitbox(20, 32, 0, 10));
 			playerEntity.add(new PositionComponent((float) (Math.random() * (500) + 1200), (float) (Math.random() * (500) + 1200)));
 			playerComponent = new ServerPlayerComponent();
-			playerEntity.add(new HealthComponent(100));
+			playerEntity.add(new HealthComponent(100, gameServer, playerEntity));
 			
 			RenderComponent rc = new RenderComponent();
 			rc.renderer = new PlayerRenderer();
@@ -105,7 +105,7 @@ public class ServerClient {
 							}
 						}
 						mcp.layer = l;
-						//connection.sendTCP(mcp);
+						connection.sendTCP(mcp);
 					}
 				}
 			}
