@@ -1,0 +1,50 @@
+
+EntityEngineUI.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Bar
+  rotate: false
+  xy: 0, 0
+  size: 256, 39
+  split: 13, 15, 12, 15
+  orig: 256, 39
+  offset: 0, 0
+  index: -1
+BarFill
+  rotate: false
+  xy: 287, 71
+  size: 145, 18
+  split: 7, 14, 11, 6
+  orig: 145, 18
+  offset: 0, 0
+  index: -1
+Board
+  rotate: false
+  xy: 0, 39
+  size: 287, 178
+  orig: 287, 178
+  offset: 0, 0
+  index: -1
+Header
+  rotate: false
+  xy: 543, 146
+  size: 291, 71
+  orig: 291, 71
+  offset: 0, 0
+  index: -1
+X
+  rotate: false
+  xy: 543, 98
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+default
+  rotate: false
+  xy: 287, 89
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1

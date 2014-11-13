@@ -45,7 +45,7 @@ public class GameState extends State {
 
 	    client = new ClientHandler(this, launcher);
 	    
-	    hud = new GameHud(launcher.batch);
+	    hud = new GameHud(launcher.batch, this);
 	    
 	    inputMultiplexer = new InputMultiplexer(hud.getStage(), inputProcessor);
     }
