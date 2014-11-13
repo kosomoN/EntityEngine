@@ -45,6 +45,16 @@ public class GameHud {
 		debugTable.row();
 		debugTable.add(serverPositionRendering);
 		
+		final CheckBox healthRendering = new CheckBox("Render health", skin);
+		healthRendering.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				RenderingSystem.renderHealth = healthRendering.isChecked();
+			}
+		});
+		debugTable.row();
+		debugTable.add(healthRendering);
+		
 		stage.addActor(debugWindow);	
 	}
 

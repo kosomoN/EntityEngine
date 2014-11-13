@@ -45,7 +45,7 @@ public class PacketProcessor {
 				
 				
 				UpdatePacket up = (UpdatePacket) p;
-				if(up.tick > lastUpdatePacketTick) {
+				if(up.tick >= lastUpdatePacketTick) {
 					lastUpdatePacketTick = up.tick;
 					
 					for(EntityUpdate eu : up.getEntityUpdates()) {

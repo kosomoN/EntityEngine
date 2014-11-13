@@ -20,7 +20,7 @@ import com.tint.entityengine.entity.components.RenderComponent;
 
 public class RenderingSystem  {
 
-    public static boolean renderHitboxes = false, renderServerPos = false;
+    public static boolean renderHitboxes = false, renderServerPos = false, renderHealth = false;
     public static Vector2 serverPlayerPos = new Vector2();
     
 	private ShapeRenderer shapeRenderer;
@@ -77,7 +77,7 @@ public class RenderingSystem  {
             
             HealthComponent health = Mappers.health.get(entity);
             
-            if(health != null) {
+            if(renderHealth && health != null) {
             	font.draw(batch, health.getHp() + "/" + health.getMaxHp(), posComp.getLerpX(frameTime), posComp.getLerpY(frameTime) + 50);
             }
         }

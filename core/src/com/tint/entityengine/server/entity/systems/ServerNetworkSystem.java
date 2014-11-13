@@ -13,6 +13,8 @@ import com.tint.entityengine.server.entity.components.Networked;
 
 public class ServerNetworkSystem extends IteratingSystem {
 
+	private static final int ENTITIES_PER_PACKET = 10;
+	
 	private int updateRate = 1;
 	
 	private int ticksSinceUpdate = 0;
@@ -35,11 +37,8 @@ public class ServerNetworkSystem extends IteratingSystem {
 			super.update(deltaTime);
 			
 			if(!updatePacket.getEntityUpdates().isEmpty()) {
-				//Don't log updatePackets
-				server.jsonSerialization.setLogging(false, true);
 				updatePacket.tick = server.getTicks();
 				server.sendToAllConnectedUDP(updatePacket);
-				//server.jsonSerialization.setLogging(true, true);
 			}
 		}
 		
@@ -66,6 +65,12 @@ public class ServerNetworkSystem extends IteratingSystem {
 					eu.addComponent(n);
 				}
 			}
+		}
+		
+		if(updatePacket.getEntityUpdates().size() >= ENTITIES_PER_PACKET) {
+			updatePacket.tick = server.getTicks();
+			server.sendToAllConnectedUDP(updatePacket);
+			updatePacket.clear();
 		}
 	}
 

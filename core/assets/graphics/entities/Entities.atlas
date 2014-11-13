@@ -4,44 +4,44 @@ size: 2048,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-Bat anim 32 7 true 150 3
+Bat anim 16 7 true 150 3
   rotate: false
-  xy: 1088, 128
+  xy: 1472, 128
   size: 96, 128
   orig: 96, 128
   offset: 0, 0
   index: -1
 Chicken anim 16 8 false 0 1
   rotate: false
-  xy: 1184, 128
+  xy: 1568, 0
   size: 32, 128
   orig: 32, 128
   offset: 0, 0
   index: -1
 ChickenEat anim 16 8 false 100 4
   rotate: false
-  xy: 960, 128
+  xy: 1344, 128
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 ChickenWalking anim 16 8 false 100 4
   rotate: false
-  xy: 960, 0
+  xy: 1344, 0
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 Log 16 16
   rotate: false
-  xy: 1184, 96
+  xy: 1664, 224
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 Player anim 32 7 false 0 1
   rotate: false
-  xy: 896, 0
+  xy: 1280, 0
   size: 64, 256
   orig: 64, 256
   offset: 0, 0
@@ -60,9 +60,23 @@ PlayerWalking anim 32 7 false 60 8
   orig: 512, 256
   offset: 0, 0
   index: -1
+PlayerWalkingAttacking anim 32 7 false 60 6
+  rotate: false
+  xy: 896, 0
+  size: 384, 256
+  orig: 384, 256
+  offset: 0, 0
+  index: -1
+Snake anim 16 8 true 100 3
+  rotate: false
+  xy: 1472, 0
+  size: 96, 128
+  orig: 96, 128
+  offset: 0, 0
+  index: -1
 Tree 48 26
   rotate: false
-  xy: 1088, 0
+  xy: 1568, 128
   size: 96, 128
   orig: 96, 128
   offset: 0, 0

@@ -12,7 +12,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.JsonSerialization;
 import com.esotericsoftware.kryonet.Server;
 import com.tint.entityengine.GameMap;
 import com.tint.entityengine.entity.EntityGrid;
@@ -28,6 +27,7 @@ import com.tint.entityengine.server.ServerClient.ClientState;
 import com.tint.entityengine.server.entity.components.AiComponent;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
 import com.tint.entityengine.server.entity.components.ai.AiAnimal;
+import com.tint.entityengine.server.entity.components.ai.AiChargeEnemy;
 import com.tint.entityengine.server.entity.systems.AiSystem;
 import com.tint.entityengine.server.entity.systems.ServerNetworkSystem;
 import com.tint.entityengine.server.entity.systems.ServerPlayerSystem;
@@ -45,9 +45,6 @@ public class GameServer {
 
 	private boolean running = true;
 	
-	//Used while developing, will be changed to kryo
-	public JsonSerialization jsonSerialization;
-	
 	public GameServer() {
 		engine = new Engine();
 		engine.addEntityListener(new ServerEntityListener(this));
@@ -60,7 +57,6 @@ public class GameServer {
 		
 		loadMap();
 		
-		jsonSerialization = new JsonSerialization();
 		server = new Server();
 		Packet.register(server.getKryo());
 		server.start();
@@ -75,17 +71,17 @@ public class GameServer {
 		
 		server.addListener(serverListener);
 		
-		if(true) {
+		for(int i = 0; i < 10; i++) {
 			Entity e = new Entity();
-			PositionComponent pos = new PositionComponent(1900, 1900);
+			PositionComponent pos = new PositionComponent((float) (1000 + Math.random() * 1000), (float) (1000 + Math.random() * 1000));
 			e.add(pos);
 			e.add(new NetworkComponent());
-			e.add(new AiComponent(new AiAnimal(e)));
+			e.add(new AiComponent(new AiChargeEnemy(e, this)));
 			e.add(new CollisionComponent(20, 16));
 			
 			RenderComponent rc = new RenderComponent();
 			rc.renderer = new DirectionalRenderer();
-			((DirectionalRenderer) rc.renderer).animFile = "Chicken";
+			((DirectionalRenderer) rc.renderer).animFile = "Bat";
 			e.add(rc);
 			e.add(new HealthComponent(20, this, e));
 			e.add(new AttackHitbox(20, 20, 0, 4));
