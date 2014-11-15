@@ -1,15 +1,25 @@
 package com.tint.entityengine.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tint.entityengine.GameState;
 import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.HealthComponent;
+import com.tint.entityengine.entity.systems.RenderingSystem;
 
 public class GameHud {
 	
@@ -18,10 +28,22 @@ public class GameHud {
 	private HealthBar hpBar;
 	private Label hpLabel;
 	private HealthComponent playerHealth;
+	private Frame debugWindow;
 	
 	public GameHud(SpriteBatch batch, GameState gs) {
 		this.gs = gs;
-		stage = new Stage(new ScreenViewport(), batch);
+		stage = new Stage(new ScreenViewport(), batch) {
+			@Override
+			public boolean keyUp(int keyCode) {
+				if(keyCode == Keys.F1) {
+					debugWindow.setVisible(!debugWindow.isVisible());
+					return true;
+				}
+				return super.keyUp(keyCode);
+			}
+		};
+		
+		
 		Skin skin = new Skin(Gdx.files.internal("graphics/ui/EntityEngineUI.json"), new TextureAtlas(Gdx.files.internal("graphics/ui/EntityEngineUI.atlas")));
 		
 		// Healthbar
@@ -34,13 +56,9 @@ public class GameHud {
 		hpLabel.setPosition(hpBar.getX() + hpBar.getWidth() - 2.5f * hpLabel.getWidth(), 50 + (hpBar.getHeight() - hpLabel.getHeight()) / 2);
 		stage.addActor(hpLabel);
 		
-		/*
-		Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json")
-		Window debugWindow = new Window("Debug tools", skin);
-		debugWindow.setWidth(256);
-		Table debugTable = new Table(skin);
-		debugTable.setFillParent(true);
-		debugWindow.addActor(debugTable);
+		
+		debugWindow = new Frame("Debug tools", skin);
+		debugWindow.setVisible(false);
 		
 		final CheckBox hitboxRendering = new CheckBox("Render hitboxes", skin);
 		hitboxRendering.addListener(new ChangeListener() {
@@ -49,7 +67,7 @@ public class GameHud {
 				RenderingSystem.renderHitboxes = hitboxRendering.isChecked();
 			}
 		});
-		debugTable.add(hitboxRendering);
+		debugWindow.addContent(hitboxRendering).align(Align.left);
 		
 		final CheckBox serverPositionRendering = new CheckBox("Render server position", skin);
 		serverPositionRendering.addListener(new ChangeListener() {
@@ -58,8 +76,8 @@ public class GameHud {
 				RenderingSystem.renderServerPos = serverPositionRendering.isChecked();
 			}
 		});
-		debugTable.row();
-		debugTable.add(serverPositionRendering);
+		debugWindow.rowContent();
+		debugWindow.addContent(serverPositionRendering).align(Align.left);
 		
 		final CheckBox healthRendering = new CheckBox("Render health", skin);
 		healthRendering.addListener(new ChangeListener() {
@@ -68,10 +86,12 @@ public class GameHud {
 				RenderingSystem.renderHealth = healthRendering.isChecked();
 			}
 		});
-		debugTable.row();
-		debugTable.add(healthRendering);
+		debugWindow.rowContent();
+		debugWindow.addContent(healthRendering).align(Align.left);
 		
-		stage.addActor(debugWindow);*/
+		debugWindow.pack();
+		
+		stage.addActor(debugWindow);
 	}
 	
 	public void updatePlayerHealth() {

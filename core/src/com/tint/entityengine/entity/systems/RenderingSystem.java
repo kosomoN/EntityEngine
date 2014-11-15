@@ -3,6 +3,7 @@ package com.tint.entityengine.entity.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -13,6 +14,7 @@ import com.tint.entityengine.GameState;
 import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.AttackHitbox;
 import com.tint.entityengine.entity.components.CollisionComponent;
+import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
 
@@ -25,6 +27,8 @@ public class RenderingSystem  {
     private Array<Entity> sortedEntities = new Array<Entity>(false, 64);
 	private GameMap map;
 	private GameState gs;
+	
+	private BitmapFont font = new BitmapFont();
 	
     public RenderingSystem(GameState gs, GameMap map) {
     	this.map = map;
@@ -70,6 +74,12 @@ public class RenderingSystem  {
             
             PositionComponent posComp = Mappers.position.get(entity);
             renderComp.renderer.render(batch, entity, posComp, frameTime);
+
+			HealthComponent health = Mappers.health.get(entity);
+			
+			if(renderHealth && health != null) {
+				font.draw(batch, health.getHp() + "/" + health.getMaxHp(), posComp.getLerpX(frameTime), posComp.getLerpY(frameTime) + 50);
+			}
         }
         
         batch.end();
