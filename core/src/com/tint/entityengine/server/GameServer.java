@@ -26,7 +26,6 @@ import com.tint.entityengine.network.packets.Packet;
 import com.tint.entityengine.server.ServerClient.ClientState;
 import com.tint.entityengine.server.entity.components.AiComponent;
 import com.tint.entityengine.server.entity.components.NetworkComponent;
-import com.tint.entityengine.server.entity.components.ai.AiAnimal;
 import com.tint.entityengine.server.entity.components.ai.AiChargeEnemy;
 import com.tint.entityengine.server.entity.systems.AiSystem;
 import com.tint.entityengine.server.entity.systems.ServerNetworkSystem;
@@ -71,7 +70,7 @@ public class GameServer {
 		
 		server.addListener(serverListener);
 		
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 0; i++) {
 			Entity e = new Entity();
 			PositionComponent pos = new PositionComponent((float) (1000 + Math.random() * 1000), (float) (1000 + Math.random() * 1000));
 			e.add(pos);

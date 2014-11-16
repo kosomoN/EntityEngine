@@ -6,13 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -29,6 +25,8 @@ public class GameHud {
 	private Label hpLabel;
 	private HealthComponent playerHealth;
 	private Frame debugWindow;
+	public ChatWidget chat;
+	private Skin skin;
 	
 	public GameHud(SpriteBatch batch, GameState gs) {
 		this.gs = gs;
@@ -39,12 +37,12 @@ public class GameHud {
 					debugWindow.setVisible(!debugWindow.isVisible());
 					return true;
 				}
+				
 				return super.keyUp(keyCode);
 			}
 		};
 		
-		
-		Skin skin = new Skin(Gdx.files.internal("graphics/ui/EntityEngineUI.json"), new TextureAtlas(Gdx.files.internal("graphics/ui/EntityEngineUI.atlas")));
+		skin = new Skin(Gdx.files.internal("graphics/ui/EntityEngineUI.json"), new TextureAtlas(Gdx.files.internal("graphics/ui/EntityEngineUI.atlas")));
 		
 		// Healthbar
 		hpBar = new HealthBar(skin);
@@ -57,6 +55,10 @@ public class GameHud {
 		stage.addActor(hpLabel);
 		
 		
+		chat = new ChatWidget(null, stage, gs);
+		chat.setSize(400, 200);
+		stage.addActor(chat);
+ 		
 		debugWindow = new Frame("Debug tools", skin);
 		debugWindow.setVisible(false);
 		
@@ -115,4 +117,7 @@ public class GameHud {
 		return stage;
 	}
 
+	public Skin getSkin() {
+		return skin;
+	}
 }

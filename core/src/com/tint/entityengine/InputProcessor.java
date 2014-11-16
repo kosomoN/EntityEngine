@@ -1,6 +1,10 @@
 package com.tint.entityengine;
 
-import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.*;
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_ATTACK;
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_DOWN;
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_LEFT;
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_RIGHT;
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_UP;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;

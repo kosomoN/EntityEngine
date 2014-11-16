@@ -24,6 +24,7 @@ public abstract class Packet {
 		kryo.register(InputPacket.class);
 		kryo.register(ConnectionApprovedPacket.class);
 		kryo.register(MapChunkPacket.class);
+		kryo.register(ChatPacket.class);
 		
 		kryo.register(RenderComponent.class);
 		kryo.register(DirectionalRenderer.class);

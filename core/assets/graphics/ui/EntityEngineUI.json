@@ -19,13 +19,14 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 	closeDialog: { down: button-down, up: button-up },
 },
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-	default: { font: default-font, fontColor: white }
+	default: { font: default-font, fontColor: white },
+	brown: { font: default-font, fontColor: brown }
 },
 com.tint.entityengine.ui.HealthBar$HealthBarStyle: {
 	default: { background: { patch: Bar }, fill: { patch: BarFill } },
 },
 com.tint.entityengine.ui.MovableTable$MovableTableStyle: {
-	default: { background: window-background},
+	default: { background: window-background, windowHeader: window-header},
 },
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 	default: { titleFont: default-font, background: window-background, titleFontColor: white },

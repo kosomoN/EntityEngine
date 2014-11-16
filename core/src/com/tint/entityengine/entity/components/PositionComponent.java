@@ -8,6 +8,9 @@ import com.tint.entityengine.entity.EntityGrid;
 import com.tint.entityengine.server.entity.components.Networked;
 
 public class PositionComponent extends Component implements Networked {
+	
+	private static float lerpTime = 3;
+	
     private float x1, y1;
     private transient int tick1;
     
@@ -39,7 +42,7 @@ public class PositionComponent extends Component implements Networked {
     public float getLerpX(float tick) {
     	if(isPlayer) return x2 + (tick % 1) * (x1 - x2);
     	
-    	tick -= 3;
+    	tick -= lerpTime;
     	
     	//If the current tick is less than the oldest snapshot
     	if(tick < tick3)
@@ -67,7 +70,7 @@ public class PositionComponent extends Component implements Networked {
     public float getLerpY(float tick) {
     	if(isPlayer) return y2 + (tick % 1) * (y1 - y2);
     	
-    	tick -= 3;
+    	tick -= lerpTime;
     	
     	//If the current tick is less than the oldest snapshot
     	if(tick < tick3)

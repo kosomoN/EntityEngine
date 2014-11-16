@@ -13,6 +13,7 @@ import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.RenderComponent;
 import com.tint.entityengine.entity.systems.RenderingSystem;
+import com.tint.entityengine.network.packets.ChatPacket;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.network.packets.MapChunkPacket;
 import com.tint.entityengine.network.packets.Packet;
@@ -120,7 +121,13 @@ public class PacketProcessor {
 			else if(p instanceof MapChunkPacket) {
 				Log.info("Recived MapChunk");
 				gs.getMap().chunkRecived((MapChunkPacket) p);
-			} else {
+			}
+			
+			else if(p instanceof ChatPacket) {
+				gs.getHud().chat.messageReceived((ChatPacket) p);
+			} 
+			
+			else {
 				Log.info("Unprocessed packet: " + p);
 			}
 		}

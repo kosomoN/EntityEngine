@@ -46,7 +46,7 @@ public class ConnectionState extends State {
 			connect();
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.exit(0);
+			launcher.enterState(States.MAINMENUSTATE);
 		}
 	}
 

@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 Bar
   rotate: false
-  xy: 256, 18
+  xy: 256, 89
   size: 256, 39
   split: 13, 15, 12, 15
   orig: 256, 39
@@ -14,22 +14,15 @@ Bar
   index: -1
 BarFill
   rotate: false
-  xy: 256, 0
+  xy: 256, 5
   size: 19, 18
   split: 6, 12, 9, 8
   orig: 19, 18
   offset: 0, 0
   index: -1
-Header
-  rotate: false
-  xy: 256, 57
-  size: 291, 71
-  orig: 291, 71
-  offset: 0, 0
-  index: -1
 button-down
   rotate: false
-  xy: 716, 49
+  xy: 575, 97
   size: 30, 31
   split: 15, 14, 15, 15
   orig: 30, 31
@@ -37,7 +30,7 @@ button-down
   index: -1
 button-up
   rotate: false
-  xy: 783, 97
+  xy: 605, 97
   size: 30, 31
   split: 15, 14, 15, 15
   orig: 30, 31
@@ -45,28 +38,28 @@ button-up
   index: -1
 check-off
   rotate: false
-  xy: 512, 24
+  xy: 512, 95
   size: 30, 33
   orig: 30, 33
   offset: 0, 0
   index: -1
 check-on
   rotate: false
-  xy: 686, 47
+  xy: 460, 56
   size: 30, 33
   orig: 30, 33
   offset: 0, 0
   index: -1
 close-down
   rotate: false
-  xy: 686, 80
+  xy: 396, 41
   size: 32, 48
   orig: 32, 48
   offset: 0, 0
   index: -1
 close-up
   rotate: false
-  xy: 718, 80
+  xy: 428, 41
   size: 32, 48
   orig: 32, 48
   offset: 0, 0
@@ -80,17 +73,17 @@ default
   index: -1
 window-background
   rotate: false
-  xy: 750, 98
+  xy: 542, 98
   size: 33, 30
   split: 15, 15, 13, 13
   orig: 33, 30
   offset: 0, 0
   index: -1
-window-frame
+window-header
   rotate: false
-  xy: 547, 43
-  size: 139, 85
-  split: 69, 69, 68, 16
-  orig: 139, 85
+  xy: 256, 23
+  size: 140, 66
+  split: 62, 77, 38, 27
+  orig: 140, 66
   offset: 0, 0
   index: -1

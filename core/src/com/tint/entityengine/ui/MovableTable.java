@@ -27,7 +27,7 @@ public class MovableTable extends Table {
 	private boolean isModal, isResizable, isMovable;
 	
 	/** Maximum pixels from the border where the MovableWindow can be resized */
-	private int resizeBorder = 8, moveAreaHeight = 50;
+	protected int resizeBorder = 8, moveAreaHeight = 60, keepInWindowAmount = 10;
 	
 	/** Are we currently resizing or moving the MovableWindow?? */
 	private boolean dragging;
@@ -141,8 +141,8 @@ public class MovableTable extends Table {
 				float width = getWidth(), height = getHeight();
 				float windowX = getX(), windowY = getY();
 
-				float minWidth = getMinWidth(), maxWidth = getMaxWidth();
-				float minHeight = getMinHeight(), maxHeight = getMaxHeight();
+				float minWidth = getMinWidth();
+				float minHeight = getMinHeight();
 				Stage stage = getStage();
 				boolean clampPosition = keepWithinStage
 						&& getParent() == stage.getRoot();
@@ -226,10 +226,10 @@ public class MovableTable extends Table {
 		if (getParent() == stage.getRoot()) {
 			float parentWidth = stage.getWidth();
 			float parentHeight = stage.getHeight();
-			if (getX() < 0) setX(0);
-			if (getRight() > parentWidth) setX(parentWidth - getWidth());
-			if (getY() < 0) setY(0);
-			if (getTop() > parentHeight) setY(parentHeight - getHeight());
+			if (getX() < -getWidth() + keepInWindowAmount) setX(-getWidth() + keepInWindowAmount);
+			if (getRight() > parentWidth + getWidth() - keepInWindowAmount) setX(parentWidth - keepInWindowAmount);
+			if (getY() < -getHeight() + keepInWindowAmount) setY(-getHeight() + keepInWindowAmount);
+			if (getTop() > parentHeight + moveAreaHeight - keepInWindowAmount) setY(parentHeight - getHeight() + moveAreaHeight - keepInWindowAmount);
 		}
 	}
 	
@@ -305,5 +305,6 @@ public class MovableTable extends Table {
 	static public class MovableTableStyle {
 		
 		public Drawable background;	
+		public Drawable windowHeader;
 	}
 }

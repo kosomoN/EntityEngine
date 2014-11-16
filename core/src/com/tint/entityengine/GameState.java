@@ -65,6 +65,7 @@ public class GameState extends State {
 		}
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		launcher.batch.setColor(1, 1, 1, 1);
 		renderSystem.render(ticks + accumulatedTicks, launcher.batch);
 		
 		hud.render();
@@ -105,6 +106,10 @@ public class GameState extends State {
 
 	public GameMap getMap() {
 		return map;
+	}
+
+	public GameHud getHud() {
+		return hud;
 	}
 	
 }

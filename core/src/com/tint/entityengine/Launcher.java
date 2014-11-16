@@ -25,7 +25,7 @@ public class Launcher extends Game {
 		Camera.orthoCam = new OrthographicCamera(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
 		
 		load();
-		enterState(States.CONNECTIONSTATE);
+		enterState(States.MAINMENUSTATE);
 		
 	}
 	

@@ -3,6 +3,7 @@ package com.tint.entityengine.server;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.tint.entityengine.network.packets.ChatPacket;
 import com.tint.entityengine.network.packets.InputPacket;
 import com.tint.entityengine.network.packets.Packet;
 
@@ -31,7 +32,10 @@ public class ServerPacketProcessor {
 						}
 					}
 				}
-			}
+			} else if(p instanceof ChatPacket) {
+				((ChatPacket) p).messageSenderId = p.senderId;
+				gameServer.getServer().sendToAllExceptTCP(p.senderId, p);
+			} 
 		}
 	}
 
