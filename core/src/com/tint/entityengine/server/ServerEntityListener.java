@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.tint.entityengine.network.packets.CreateEntityPacket;
 import com.tint.entityengine.network.packets.RemoveEntityPacket;
-import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
+import com.tint.entityengine.server.entity.components.Networked;
 
 public class ServerEntityListener implements EntityListener {
 
@@ -30,7 +30,7 @@ public class ServerEntityListener implements EntityListener {
 		ImmutableArray<Component> components = entity.getComponents();
 		for(int j = 0; j < components.size(); j++) {
 			Component comp =  components.get(j);
-			if(!(comp instanceof ServerPlayerComponent))
+			if(comp instanceof Networked)
 				cep.addComponent(components.get(j));
 		}
 		

@@ -3,7 +3,6 @@ package com.tint.entityengine.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -42,7 +41,7 @@ public class GameHud {
 			}
 		};
 		
-		skin = new Skin(Gdx.files.internal("graphics/ui/EntityEngineUI.json"), new TextureAtlas(Gdx.files.internal("graphics/ui/EntityEngineUI.atlas")));
+		skin = new Skin(Gdx.files.internal("graphics/ui/EntityEngineUI.json"));
 		
 		// Healthbar
 		hpBar = new HealthBar(skin);

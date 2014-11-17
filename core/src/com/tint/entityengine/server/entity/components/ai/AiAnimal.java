@@ -4,17 +4,13 @@ import com.badlogic.ashley.core.Entity;
 import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
+import com.tint.entityengine.server.GameServer;
 
 public class AiAnimal implements AiController {
 
 	private PositionComponent position;
 	private int dir;
 	private Entity entity;
-	
-	public AiAnimal(Entity entity) {
-		this.position = Mappers.position.get(entity);
-		this.entity = entity;
-	}
 	
 	@Override
 	public void update(int tick) {
@@ -36,6 +32,12 @@ public class AiAnimal implements AiController {
 			DirectionalRenderer renderer = (DirectionalRenderer) Mappers.render.get(entity).renderer;
 			renderer.setCustomAnimString(renderer.animFile + "Eat", 2);
 		}
+	}
+
+	@Override
+	public void init(GameServer gameServer, Entity entity) {
+		this.position = Mappers.position.get(entity);
+		this.entity = entity;		
 	}
 	
 }

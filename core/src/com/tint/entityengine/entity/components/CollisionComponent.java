@@ -1,6 +1,8 @@
 package com.tint.entityengine.entity.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
+import com.tint.entityengine.server.GameServer;
 import com.tint.entityengine.server.entity.components.Networked;
 
 public class CollisionComponent extends Component implements Networked {
@@ -13,6 +15,8 @@ public class CollisionComponent extends Component implements Networked {
 		this.width = width;
 		this.height = height;
 	}
+	
+	public CollisionComponent() {}
 	
 	public float getOffset(int corner, int coordinate) {
 		if(!init) {
@@ -52,5 +56,4 @@ public class CollisionComponent extends Component implements Networked {
 	public void resetChanged() {
 		
 	}
-
 }

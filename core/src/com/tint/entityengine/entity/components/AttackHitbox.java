@@ -15,6 +15,8 @@ public class AttackHitbox extends Component implements Networked {
 		this.offsetY = offsetY;
 	}
 	
+	public AttackHitbox() {}
+	
 	public int getWidth() {
 		return width;
 	}

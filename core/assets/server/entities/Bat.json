@@ -1,0 +1,42 @@
+{
+components: [
+	{
+		class: com.tint.entityengine.entity.components.PositionComponent,
+		y1: 1950,
+		x1: 1850
+	},
+	{
+		class: com.tint.entityengine.entity.components.CollisionComponent,
+		width: 20,
+		height: 16
+	},
+	{
+		class: com.tint.entityengine.entity.components.RenderComponent,
+		renderer: {
+			class: com.tint.entityengine.entity.components.renderers.DirectionalRenderer,
+			animFile: Bat
+		}
+	},
+	{
+		class: com.tint.entityengine.server.entity.components.NetworkComponent
+	},
+	{
+		class: com.tint.entityengine.entity.components.AttackHitbox,
+		width: 20,
+		height: 20,
+		offsetX: 0,
+		offsetY: 4
+	},
+	{
+		class: com.tint.entityengine.entity.components.HealthComponent,
+		hp: 20,
+		maxHp: 20
+	},
+	{
+		class: com.tint.entityengine.server.entity.components.AiComponent,
+		aiController: {
+			class: com.tint.entityengine.server.entity.components.ai.AiChargeEnemy
+		}
+	},
+]
+}

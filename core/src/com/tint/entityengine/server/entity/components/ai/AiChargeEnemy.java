@@ -11,12 +11,6 @@ public class AiChargeEnemy implements AiController {
 	private Entity entity;
 	private GameServer gameServer;
 	
-	public AiChargeEnemy(Entity entity, GameServer gameServer) {
-		this.position = Mappers.position.get(entity);
-		this.entity = entity;
-		this.gameServer = gameServer;
-	}
-	
 	@Override
 	public void update(int tick) {
 		if(gameServer.getClients().size() == 0)
@@ -33,6 +27,13 @@ public class AiChargeEnemy implements AiController {
 		if(dx * dx + dy * dy < 500) {
 			Mappers.health.get(gameServer.getClients().get(0).getEntity()).addHp(-1);
 		}
+	}
+
+	@Override
+	public void init(GameServer gameServer, Entity entity) {
+		this.position = Mappers.position.get(entity);
+		this.entity = entity;
+		this.gameServer = gameServer;
 	}
 	
 }

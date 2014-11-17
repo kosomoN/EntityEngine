@@ -8,25 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
+import com.esotericsoftware.jsonbeans.JsonReader;
+import com.esotericsoftware.jsonbeans.JsonValue;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.tint.entityengine.GameMap;
 import com.tint.entityengine.entity.EntityGrid;
-import com.tint.entityengine.entity.components.AttackHitbox;
-import com.tint.entityengine.entity.components.CollisionComponent;
-import com.tint.entityengine.entity.components.HealthComponent;
-import com.tint.entityengine.entity.components.PositionComponent;
-import com.tint.entityengine.entity.components.RenderComponent;
-import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
-import com.tint.entityengine.entity.components.renderers.TextureRenderer;
 import com.tint.entityengine.network.packets.Packet;
 import com.tint.entityengine.server.ServerClient.ClientState;
-import com.tint.entityengine.server.entity.components.AiComponent;
-import com.tint.entityengine.server.entity.components.NetworkComponent;
-import com.tint.entityengine.server.entity.components.ai.AiChargeEnemy;
 import com.tint.entityengine.server.entity.systems.AiSystem;
 import com.tint.entityengine.server.entity.systems.ServerNetworkSystem;
 import com.tint.entityengine.server.entity.systems.ServerPlayerSystem;
@@ -69,39 +58,6 @@ public class GameServer {
 		serverListener = new ServerListener(this);
 		
 		server.addListener(serverListener);
-		
-		for(int i = 0; i < 0; i++) {
-			Entity e = new Entity();
-			PositionComponent pos = new PositionComponent((float) (1000 + Math.random() * 1000), (float) (1000 + Math.random() * 1000));
-			e.add(pos);
-			e.add(new NetworkComponent());
-			e.add(new AiComponent(new AiChargeEnemy(e, this)));
-			e.add(new CollisionComponent(20, 16));
-			
-			RenderComponent rc = new RenderComponent();
-			rc.renderer = new DirectionalRenderer();
-			((DirectionalRenderer) rc.renderer).animFile = "Bat";
-			e.add(rc);
-			e.add(new HealthComponent(20, this, e));
-			e.add(new AttackHitbox(20, 20, 0, 4));
-			
-			engine.addEntity(e);
-		}
-		
-		if(true) {
-			Entity e = new Entity();
-			PositionComponent pos = new PositionComponent(1850, 1950);
-			e.add(pos);
-			e.add(new NetworkComponent());
-			e.add(new CollisionComponent(24, 14));
-			
-			RenderComponent rc = new RenderComponent();
-			rc.renderer = new TextureRenderer();
-			((TextureRenderer) rc.renderer).textureFile = "Tree";
-			e.add(rc);
-			
-			engine.addEntity(e);
-		}
 	}
 
 	private long lastTickTime;
@@ -174,6 +130,16 @@ public class GameServer {
 	public List<ServerClient> getClients() {
 		return clients;
 	}
+	
+	public ServerClient getClientById(int id) {
+		synchronized (clients) {
+			for(ServerClient client : clients) {
+				if(client.getID() == id)
+					return client;
+			}
+		}
+		return null;
+	}
 
 	public GameMap getMap() {
 		return map;
@@ -183,7 +149,7 @@ public class GameServer {
 	private void loadMap() {
 		try {
 			JsonReader jsonReader = new JsonReader();
-			JsonValue mapJson = jsonReader.parse(new FileInputStream(new File("maps/Basic.json")));
+			JsonValue mapJson = jsonReader.parse(new FileInputStream(new File("server/maps/Basic.json")));
 
 			map = new GameMap(mapJson.getInt("width"), mapJson.getInt("height"), null);
 			

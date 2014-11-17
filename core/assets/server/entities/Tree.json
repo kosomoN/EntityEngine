@@ -1,0 +1,24 @@
+{
+components: [
+	{
+		class: com.tint.entityengine.entity.components.PositionComponent,
+		y1: 1950,
+		x1: 1850
+	},
+	{
+		class: com.tint.entityengine.entity.components.CollisionComponent,
+		width: 20,
+		height: 16
+	},
+	{
+		class: com.tint.entityengine.entity.components.RenderComponent,
+		renderer: {
+			class: com.tint.entityengine.entity.components.renderers.TextureRenderer,
+			textureFile: Tree
+		}
+	},
+	{
+		class: com.tint.entityengine.server.entity.components.NetworkComponent
+	}
+]
+}
