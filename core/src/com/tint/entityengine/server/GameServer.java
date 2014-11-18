@@ -34,6 +34,13 @@ public class GameServer {
 	private boolean running = true;
 	
 	public GameServer() {
+		server = new Server();
+		Packet.register(server.getKryo());
+		//Watch out
+		server.getKryo().setRegistrationRequired(false);
+		
+		EntityTemplateManager.loadEntityTemplates(server.getKryo());
+		
 		engine = new Engine();
 		engine.addEntityListener(new ServerEntityListener(this));
 		engine.addSystem(new ServerPlayerSystem(this));
@@ -45,8 +52,7 @@ public class GameServer {
 		
 		loadMap();
 		
-		server = new Server();
-		Packet.register(server.getKryo());
+		
 		server.start();
 		try {
 			server.bind(54333, 54333);

@@ -1,21 +1,14 @@
 package com.tint.entityengine.server;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.esotericsoftware.jsonbeans.Json;
 import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.network.packets.ChatPacket;
 import com.tint.entityengine.network.packets.InputPacket;
 import com.tint.entityengine.network.packets.Packet;
-import com.tint.entityengine.server.entity.components.Initializable;
-import com.tint.entityengine.server.entity.components.Networked;
 
 public class ServerPacketProcessor {
 
@@ -63,28 +56,19 @@ public class ServerPacketProcessor {
 				return;
 			}
 			
-			//TODO Add entity loading system
-			Json json = new Json();
-			try {
-				SerializedComponents components = json.fromJson(SerializedComponents.class, new FileInputStream(new File("server/entities/" + split[1] + ".json")));
-				
-				Entity e = new Entity();
-				
-				for(Component comp : components.components) {
-					if(comp instanceof Initializable)
-						((Initializable) comp).init(gameServer, e);
-					e.add(comp);
-				}
-				
-				PositionComponent playerPos = Mappers.position.get(gameServer.getClientById(cp.messageSenderId).getEntity());
-				e.getComponent(PositionComponent.class).set(playerPos.getX(), playerPos.getY() + 32, gameServer.getTicks());
-				
-				gameServer.getEngine().addEntity(e);
-			} catch (Exception e) {
-				e.printStackTrace();
+			Entity e = EntityTemplateManager.createEntity(split[1], gameServer);
+			
+			//If it the entity name is invalid
+			if(e == null) {
 				gameServer.getServer().sendToTCP(cp.senderId, new ChatPacket("Failed to spawn entity"));
 				return;
 			}
+			
+			//Position it above the player
+			PositionComponent playerPos = Mappers.position.get(gameServer.getClientById(cp.messageSenderId).getEntity());
+			e.getComponent(PositionComponent.class).set(playerPos.getX(), playerPos.getY() + 32, gameServer.getTicks());
+			
+			gameServer.getEngine().addEntity(e);
 		}
 	}
 

@@ -4,10 +4,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.tint.entityengine.Assets;
-import com.tint.entityengine.GameMap;
 import com.tint.entityengine.GameState;
 import com.tint.entityengine.entity.components.PositionComponent;
 

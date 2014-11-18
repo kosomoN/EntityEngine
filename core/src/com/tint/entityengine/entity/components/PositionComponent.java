@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.EntityGrid;
-import com.tint.entityengine.server.GameServer;
 import com.tint.entityengine.server.entity.components.Networked;
 
 public class PositionComponent extends Component implements Networked {

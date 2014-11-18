@@ -1,7 +1,14 @@
 package com.tint.entityengine.server.entity.systems;
 
-import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.*;
-import static com.tint.entityengine.entity.components.renderers.DirectionalRenderer.*;
+import static com.tint.entityengine.entity.components.renderers.DirectionalRenderer.E;
+import static com.tint.entityengine.entity.components.renderers.DirectionalRenderer.N;
+import static com.tint.entityengine.entity.components.renderers.DirectionalRenderer.S;
+import static com.tint.entityengine.entity.components.renderers.DirectionalRenderer.W;
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_ATTACK;
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_DOWN;
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_LEFT;
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_RIGHT;
+import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.KEY_UP;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -11,7 +18,6 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.tint.entityengine.Mappers;
 import com.tint.entityengine.entity.components.AttackHitbox;
 import com.tint.entityengine.entity.components.PositionComponent;
-import com.tint.entityengine.entity.components.renderers.DirectionalRenderer;
 import com.tint.entityengine.server.GameServer;
 import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
 
