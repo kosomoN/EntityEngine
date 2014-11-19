@@ -13,8 +13,8 @@ components: [
 	{
 		class: RenderComponent,
 		renderer: {
-			class: renderers.TextureRenderer,
-			textureFile: Tree
+			class: renderers.DirectionalRenderer,
+			animFile: Bat
 		}
 	},
 	{
@@ -23,12 +23,20 @@ components: [
 	{
 		class: AttackHitbox,
 		width: 20,
-		height: 16
+		height: 20,
+		offsetX: 0,
+		offsetY: 4
 	},
 	{
 		class: HealthComponent,
 		hp: 20,
 		maxHp: 20
-	}
+	},
+	{
+		class: com.tint.entityengine.server.entity.components.AiComponent,
+		aiController: {
+			class: com.tint.entityengine.server.entity.components.ai.AiChargeEnemy
+		}
+	},
 ]
 }

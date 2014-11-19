@@ -19,16 +19,6 @@ components: [
 	},
 	{
 		class: com.tint.entityengine.server.entity.components.NetworkComponent
-	},
-	{
-		class: AttackHitbox,
-		width: 20,
-		height: 16
-	},
-	{
-		class: HealthComponent,
-		hp: 20,
-		maxHp: 20
 	}
 ]
 }
