@@ -11,14 +11,14 @@ import com.badlogic.ashley.core.Entity;
 import com.esotericsoftware.jsonbeans.Json;
 import com.esotericsoftware.jsonbeans.JsonReader;
 import com.esotericsoftware.jsonbeans.JsonValue;
-import com.esotericsoftware.jsonbeans.JsonValue.PrettyPrintSettings;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.minlog.Log;
 import com.tint.entityengine.server.entity.components.Initializable;
 
 public class EntityTemplateManager {
 	
-	private static final String COMPONENT_PACKAGE = "com.tint.entityengine.entity.components.";
+	private static final String COMPONENT_PACKAGE = "com.tint.entityengine.entity.components";
+	private static final String SERVER_COMPONENT_PACKAGE = "com.tint.entityengine.server.entity.components";
 	
 	private static Map<String, EntityTemplate> templates = new HashMap<String, EntityTemplate>();
 	
@@ -65,16 +65,7 @@ public class EntityTemplateManager {
     			JsonValue jsonValue = reader.parse(new File("server/entities/" + name));
     			
     			//Add full package declarations
-    			for(JsonValue component : jsonValue.get("components")) {
-    				JsonValue clazz = component.get("class");
-    				
-    				String className = clazz.asString();
-
-    				//If the class name doesn't contain the package
-    				if(!className.contains(".")) {
-    					clazz.set(COMPONENT_PACKAGE + className);
-    				}
-    			}
+				addFullPackage(jsonValue.get("components"));
     			
     			//De-serialize
     			EntityTemplate template = json.fromJson(EntityTemplate.class, jsonValue.toString());
@@ -89,6 +80,32 @@ public class EntityTemplateManager {
 		}
     	
     	Log.info(templates.values().size() + " entities loaded");
+	}
+	
+	private static void addFullPackage(JsonValue jsonValueArray) {
+		for(JsonValue component : jsonValueArray) {
+			
+			//If a nested array was found, check it too
+			if(component.isObject() || component.isArray()) {
+				System.out.println("true");
+				addFullPackage(component);
+				continue;
+			}
+
+			if(component.name.equals("class")) {
+				String className = component.asString();
+		
+				System.out.println(className);
+				//If the class name doesn't contain the package
+				if(!className.contains(".")) {
+					component.set(COMPONENT_PACKAGE + "." + className);
+				} else if(className.startsWith(".")) {
+					component.set(COMPONENT_PACKAGE + className);
+				} else if(className.startsWith("$SERVER")) {
+					component.set(SERVER_COMPONENT_PACKAGE + className.substring("$SERVER".length(), className.length()));
+				}
+			}
+		}
 	}
 
 	private static class EntityTemplate {

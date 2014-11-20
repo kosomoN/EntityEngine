@@ -13,12 +13,12 @@ components: [
 	{
 		class: RenderComponent,
 		renderer: {
-			class: renderers.DirectionalRenderer,
+			class: .renderers.DirectionalRenderer,
 			animFile: Bat
 		}
 	},
 	{
-		class: com.tint.entityengine.server.entity.components.NetworkComponent
+		class: $SERVER.NetworkComponent
 	},
 	{
 		class: AttackHitbox,
@@ -33,9 +33,9 @@ components: [
 		maxHp: 20
 	},
 	{
-		class: com.tint.entityengine.server.entity.components.AiComponent,
+		class: $SERVER.AiComponent,
 		aiController: {
-			class: com.tint.entityengine.server.entity.components.ai.AiChargeEnemy
+			class: $SERVER.ai.AiChargeEnemy
 		}
 	},
 ]

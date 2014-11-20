@@ -13,12 +13,12 @@ components: [
 	{
 		class: RenderComponent,
 		renderer: {
-			class: renderers.TextureRenderer,
+			class: .renderers.TextureRenderer,
 			textureFile: Tree
 		}
 	},
 	{
-		class: com.tint.entityengine.server.entity.components.NetworkComponent
+		class: $SERVER.NetworkComponent
 	},
 	{
 		class: AttackHitbox,

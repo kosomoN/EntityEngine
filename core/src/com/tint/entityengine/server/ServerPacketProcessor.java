@@ -60,7 +60,7 @@ public class ServerPacketProcessor {
 			
 			//If it the entity name is invalid
 			if(e == null) {
-				gameServer.getServer().sendToTCP(cp.senderId, new ChatPacket("Failed to spawn entity"));
+				gameServer.getServer().sendToTCP(cp.senderId, new ChatPacket("Invalid entity name"));
 				return;
 			}
 			
