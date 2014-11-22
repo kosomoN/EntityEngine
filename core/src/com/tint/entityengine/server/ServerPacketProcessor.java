@@ -4,8 +4,11 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.badlogic.ashley.core.Entity;
+import com.tint.entityengine.GameMap;
 import com.tint.entityengine.Mappers;
+import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
+import com.tint.entityengine.entity.pathfinding.SemiStaticField;
 import com.tint.entityengine.network.packets.ChatPacket;
 import com.tint.entityengine.network.packets.InputPacket;
 import com.tint.entityengine.network.packets.Packet;
@@ -66,9 +69,18 @@ public class ServerPacketProcessor {
 			
 			//Position it above the player
 			PositionComponent playerPos = Mappers.position.get(gameServer.getClientById(cp.messageSenderId).getEntity());
-			e.getComponent(PositionComponent.class).set(playerPos.getX(), playerPos.getY() + 32, gameServer.getTicks());
+			e.getComponent(PositionComponent.class).set(playerPos.getX(), playerPos.getY() + 128, gameServer.getTicks());
 			
 			gameServer.getEngine().addEntity(e);
+			
+			// TODO Temporal Code: Must be changed later
+			if(!split[1].equalsIgnoreCase("bat")) {
+				gameServer.getFieldProcessor().addField(SemiStaticField.generate((int) (playerPos.getX() / GameMap.TILE_SIZE), (int) ((playerPos.getY() + 128) / GameMap.TILE_SIZE), 3, false));
+			}
+			
+		} else if(split[0].equalsIgnoreCase("/heal")) {
+			HealthComponent playerHp = Mappers.health.get(gameServer.getClientById(cp.messageSenderId).getEntity());
+			playerHp.setHp(playerHp.getMaxHp());
 		}
 	}
 

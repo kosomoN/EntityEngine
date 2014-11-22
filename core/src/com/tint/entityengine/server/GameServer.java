@@ -8,12 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.esotericsoftware.jsonbeans.JsonReader;
 import com.esotericsoftware.jsonbeans.JsonValue;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.tint.entityengine.GameMap;
 import com.tint.entityengine.entity.EntityGrid;
+import com.tint.entityengine.entity.FieldProcessor;
+import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.network.packets.Packet;
 import com.tint.entityengine.server.ServerClient.ClientState;
 import com.tint.entityengine.server.entity.systems.AiSystem;
@@ -28,6 +31,7 @@ public class GameServer {
 	private Engine engine;
 	private ServerListener serverListener;
 	private GameMap map;
+	private FieldProcessor fieldProcessor;
 	
 	private List<ServerClient> clients = new ArrayList<ServerClient>();
 
@@ -52,6 +56,7 @@ public class GameServer {
 		
 		loadMap();
 		
+		fieldProcessor = new FieldProcessor(map);
 		
 		server.start();
 		try {
@@ -83,6 +88,26 @@ public class GameServer {
 		}
 	}
 	
+	/**
+	 * Spawns an entity by its name
+	 * @param name The name of the entity
+	 * @param x The x-position
+	 * @param y The y-position
+	 * @return If spawn was successful
+	 */
+	public boolean spawnEntity(String name, float x, float y) {
+		Entity e = EntityTemplateManager.createEntity(name, this);
+		
+		//If it the entity name is invalid
+		if(e == null)
+			return false;
+		
+		e.getComponent(PositionComponent.class).set(x, y, getTicks());
+		engine.addEntity(e);
+		
+		return true;
+	}
+	
 	public int getTicks() {
 		return ticks;
 	}
@@ -93,6 +118,10 @@ public class GameServer {
 	
 	public Server getServer() {
 		return server;
+	}
+	
+	public FieldProcessor getFieldProcessor() {
+		return fieldProcessor;
 	}
 
 	public void sendToAllConnectedUDP(Object object) {

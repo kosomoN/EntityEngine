@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.tint.entityengine.ConsoleVariables;
 import com.tint.entityengine.GameState;
 import com.tint.entityengine.LogOutput;
+import com.tint.entityengine.Mappers;
+import com.tint.entityengine.entity.components.HealthComponent;
 import com.tint.entityengine.network.packets.ChatPacket;
 
 public class ChatWidget extends Table implements LogOutput {
@@ -104,6 +106,11 @@ public class ChatWidget extends Table implements LogOutput {
 			return true;
 		}
 		
+		else if(split[0].equals("/heal")) {
+			HealthComponent hc = Mappers.health.get(gameState.getPlayer().getEntity());
+			hc.setHp(hc.getMaxHp());
+			chatLabel.getText().append("\n").append("[Player]: " + "Healed");
+		}
 		
 		return false;
 	}

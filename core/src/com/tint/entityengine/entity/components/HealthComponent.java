@@ -64,7 +64,7 @@ public class HealthComponent extends Component implements Networked, Initializab
 	public int getMaxHp() {
 		return maxHp;
 	}
-
+	
 	@Override
 	public boolean hasChanged() {
 		return hasChanged;

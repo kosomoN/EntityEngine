@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.tint.entityengine.entity.pathfinding.MapField;
 import com.tint.entityengine.network.packets.MapChunkPacket;
 
 public class GameMap {
@@ -17,9 +18,12 @@ public class GameMap {
 	private short[] blockedIndexes; // Costal tiles: { 93, 94, 125, 126 } TODO Add more manually
 	private TextureRegion[] tileset;
 	
+	private MapField mapField;
+	
 	public GameMap(int width, int height, String tilesetPath) {
 		this.width = width;
 		this.height = height;
+		
 		tiles = new short[LAYERS][width][height];
 		
 		if(tilesetPath != null) {
@@ -45,6 +49,8 @@ public class GameMap {
 			}
 		}
 		blockedIndexes = new short[0];
+		
+		mapField = MapField.generate(this);
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -73,7 +79,6 @@ public class GameMap {
 				}
 			}
 		}
-		
 	}
 
 	public void chunkRecived(MapChunkPacket mcp) {
@@ -90,6 +95,10 @@ public class GameMap {
 	
 	public int getHeight() {
 		return width;
+	}
+	
+	public MapField getMapField() {
+		return mapField;
 	}
 	
 	public boolean isOnMap(float x, float y) {

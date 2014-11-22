@@ -61,6 +61,15 @@ public class GameHud {
 		debugWindow = new Frame("Debug tools", skin);
 		debugWindow.setVisible(false);
 		
+		final CheckBox fieldsRendering = new CheckBox("Render fields or tiles", skin);
+		fieldsRendering.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				RenderingSystem.renderFields = fieldsRendering.isChecked();
+			}
+		});
+		debugWindow.addContent(fieldsRendering).align(Align.left);
+		
 		final CheckBox hitboxRendering = new CheckBox("Render hitboxes", skin);
 		hitboxRendering.addListener(new ChangeListener() {
 			@Override
