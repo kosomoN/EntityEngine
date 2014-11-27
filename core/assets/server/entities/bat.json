@@ -35,7 +35,8 @@ components: [
 	{
 		class: $SERVER.AiComponent,
 		aiController: {
-			class: $SERVER.ai.AiChargeEnemy
+			class: $SERVER.ai.AiChargeEnemy,
+			attackSpeed: 30
 		}
 	},
 ]

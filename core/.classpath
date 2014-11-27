@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="output" path="bin"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
-	<classpathentry sourcepath="C:/Users/Daniel/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.4.1/a36f5d3e6a3b0fa3c625f8ce88216daf99435bce/gdx-1.4.1-sources.jar" kind="lib" path="C:/Users/Daniel/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.4.1/df470d263438048af74860ca51fc497c16a0c76a/gdx-1.4.1.jar" exported="true"/>
-	<classpathentry sourcepath="C:/Users/Daniel/.gradle/caches/modules-2/files-2.1/com.badlogicgames.ashley/ashley/1.3.1/302eff92f47d938fcef9139e26c037024f8cd0f7/ashley-1.3.1-sources.jar" kind="lib" path="C:/Users/Daniel/.gradle/caches/modules-2/files-2.1/com.badlogicgames.ashley/ashley/1.3.1/43aed4ac92b8cce24e92a3836eb5ac916026b49f/ashley-1.3.1.jar" exported="true"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
 	<classpathentry kind="lib" path="/Entity Engine/lib/jsonbeans.jar"/>
 	<classpathentry kind="lib" path="/Entity Engine/lib/kryo.jar"/>
 	<classpathentry kind="lib" path="/Entity Engine/lib/kryonet.jar"/>
 	<classpathentry kind="lib" path="/Entity Engine/lib/minlog-1.2.jar"/>
 	<classpathentry kind="lib" path="/Entity Engine/lib/objenesis-1.2.jar"/>
 	<classpathentry kind="lib" path="/Entity Engine/lib/reflectasm-1.09-shaded.jar"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

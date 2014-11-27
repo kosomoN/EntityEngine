@@ -1,72 +1,88 @@
 package com.tint.entityengine.server.entity.components.ai;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.tint.entityengine.GameMap;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.tint.entityengine.Mappers;
+import com.tint.entityengine.entity.EntityGrid;
+import com.tint.entityengine.entity.components.CollisionComponent;
 import com.tint.entityengine.entity.components.PositionComponent;
-import com.tint.entityengine.entity.pathfinding.DynamicField;
 import com.tint.entityengine.server.GameServer;
 import com.tint.entityengine.server.ServerClient;
+import com.tint.entityengine.server.entity.components.ServerPlayerComponent;
 
 public class AiChargeEnemy implements AiController {
 
+	public static final ComponentMapper<ServerPlayerComponent> playerMapper = ComponentMapper.getFor(ServerPlayerComponent.class);
+	
 	private PositionComponent position;
 	private Entity entity;
 	private GameServer gameServer;
-	private DynamicField goal;
+	private float speed = 1;
+	
+	private int attackSpeed;
+	private transient int lastAttackTick;
 	
 	@Override
 	public void update(int tick) {
 		if(gameServer.getClients().size() == 0)
 			return;
 		
-		PositionComponent playerPos = getNearestPlayerPosition();
+		Entity chasePlayer = gameServer.getClients().get(0).getEntity();
+		PositionComponent playerPos = Mappers.position.get(chasePlayer);
 		
-		// If target isn't set, set it.
-		if(goal == null) {
-			goal = DynamicField.generate((int) (playerPos.getLerpX(tick) / GameMap.TILE_SIZE), (int) (playerPos.getLerpY(tick) / GameMap.TILE_SIZE), Math.max(gameServer.getMap().getWidth(), gameServer.getMap().getHeight()), true);
-		}
+		float dx = playerPos.getX() - position.getX();
+		float dy = playerPos.getY() - position.getY();
 		
-		// Correct target position
-		goal.move((int) (playerPos.getLerpX(tick) / GameMap.TILE_SIZE), (int) (playerPos.getLerpY(tick) / GameMap.TILE_SIZE));
-		
-		// x, y in tile coordinates
-		int x = (int) (position.getX() / GameMap.TILE_SIZE);
-		int y = (int) (position.getY() / GameMap.TILE_SIZE);
-		
-		// Value of the tile the enemy stands on, changes to the highest value of the neighbouring tiles and current tile
-		int highestValue = gameServer.getFieldProcessor().getValue(x, y) + goal.getValue(x - goal.getX() + goal.getSize(), y - goal.getY() + goal.getSize()); // currentblock
-		int newX = 0, newY = 0;
-		for(int i = -1; i < 2; i++) {
-			for(int j = -1; j < 2; j++) {
-				if(!(i == 0 && j == 0)) {
-					int value1 = gameServer.getFieldProcessor().getValue(x + i, y + j) + goal.getValue(x + i - goal.getX() + goal.getSize(), y + j - goal.getY() + goal.getSize());
+		if(lastAttackTick + attackSpeed <= tick) {
+			if(dx * dx + dy * dy < 500) {
+				
+				Mappers.health.get(chasePlayer).addHp(-10);
+				lastAttackTick = tick;
+				
+			} else {
+				
+				//Normalize vector between the player and enemy to get the direction
+				float length = (float) Math.sqrt(dx * dx + dy * dy);
+				dx /= length;
+				dy /= length;
+				speed = 3;
+				//Push away from obstacles
+				ImmutableArray<Entity> nearbyEntities = EntityGrid.get(position);
+				for(int i = 0; i < nearbyEntities.size(); i++) {
+					Entity e = nearbyEntities.get(i);
+					CollisionComponent collision = Mappers.dynamicCollision.get(e);
 					
-					if(value1 > highestValue) {
-						highestValue = value1;
-						newX = x + i;
-						newY = y + j;
+					if(collision != null) {
+						PositionComponent otherPos = Mappers.position.get(e);
+						
+						//Don't push away from players
+						if(e == entity || playerMapper.get(e) != null)
+							continue;
+						
+						float distX = position.getX() - otherPos.getX();
+						float distY = position.getY() - otherPos.getY();
+						
+						float totalDist = (float) distX * distX + distY * distY;
+						distX /= totalDist;
+						distY /= totalDist;
+						
+						float pushRange = Math.max(collision.getWidth(), collision.getHeight()) * 5;
+						pushRange *= pushRange;
+						
+						if(pushRange > totalDist) {
+							dx += distX * (1 - totalDist / pushRange) * 20;
+							dy += distY * (1 - totalDist / pushRange) * 20;
+						}
 					}
 				}
+				
+				//Normalize the movement vector
+				length = (float) Math.sqrt(dx * dx + dy * dy);
+				dx /= length;
+				dy /= length;
+				position.add(dx * speed, dy * speed, -1, true, entity);
 			}
-		}
-		
-		// If newX and newY are 0 it means the enemy found the target position
-		if(!(newX == 0 && newY == 0)) {
-			float dx = newX * GameMap.TILE_SIZE - position.getX();
-			float dy = newY * GameMap.TILE_SIZE - position.getY();
-			// Added offset from clean tiles
-			dx += position.getLerpX(tick) % GameMap.TILE_SIZE;
-			dy += position.getLerpY(tick) % GameMap.TILE_SIZE;
-			float angle = (float) (Math.atan2(dy, dx));
-			position.add((float) Math.cos(angle) * 3, (float) Math.sin(angle) * 3, -1, true, entity);
-		} else {
-			float dx = playerPos.getX() - position.getX();
-			float dy = playerPos.getY() - position.getY();
-			
-			// Maximum distance is ~two squares and added a bit restriction
-			if(dx * dx + dy * dy < 64 * 64 - 100)
-				Mappers.health.get(gameServer.getClients().get(0).getEntity()).addHp(-1);
 		}
 	}
 
@@ -77,21 +93,26 @@ public class AiChargeEnemy implements AiController {
 		this.gameServer = gameServer;
 	}
 	
-	public PositionComponent getNearestPlayerPosition() {
-		PositionComponent currPlayerPos = null;
-		float currentDx = Float.MAX_VALUE, currentDy = Float.MAX_VALUE;
-		for(ServerClient client : gameServer.getClients()) {
-			PositionComponent playerPos = Mappers.position.get(client.getEntity());
-			float dx = playerPos.getX() - position.getX();
-			float dy = playerPos.getY() - position.getY();
-			
-			if(dx * dx + dy * dy < currentDx * currentDx + currentDy * currentDy) {
-				currentDx = dx;
-				currentDy = dy;
-				currPlayerPos = playerPos;
+	public Entity getNearestPlayerPosition() {
+		Entity playerEntity = null;
+		float currentDxSq = Float.MAX_VALUE, currentDySq = Float.MAX_VALUE;
+		synchronized (gameServer.getClients()) {
+			for(ServerClient client : gameServer.getClients()) {
+				PositionComponent playerPos = Mappers.position.get(client.getEntity());
+				float dx = playerPos.getX() - position.getX();
+				float dy = playerPos.getY() - position.getY();
+				
+				dx *= dx;
+				dy *= dy;
+				
+				if(dx + dy < currentDxSq + currentDySq) {
+					currentDxSq = dx;
+					currentDySq = dy;
+					playerEntity = client.getEntity();
+				}
 			}
 		}
-		return currPlayerPos;
+		return playerEntity;
 	}
 	
 }

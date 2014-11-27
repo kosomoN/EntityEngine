@@ -22,7 +22,7 @@ public class Launcher extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		Camera.orthoCam = new OrthographicCamera(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+		Camera.setCamera(new OrthographicCamera(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2));
 		
 		load();
 		enterState(States.MAINMENUSTATE);

@@ -87,7 +87,6 @@ public class EntityTemplateManager {
 			
 			//If a nested array was found, check it too
 			if(component.isObject() || component.isArray()) {
-				System.out.println("true");
 				addFullPackage(component);
 				continue;
 			}
@@ -95,7 +94,6 @@ public class EntityTemplateManager {
 			if(component.name.equals("class")) {
 				String className = component.asString();
 		
-				System.out.println(className);
 				//If the class name doesn't contain the package
 				if(!className.contains(".")) {
 					component.set(COMPONENT_PACKAGE + "." + className);

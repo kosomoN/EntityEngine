@@ -20,7 +20,7 @@ import com.tint.entityengine.entity.components.RenderComponent;
 
 public class RenderingSystem  {
 
-    public static boolean renderHitboxes = false, renderServerPos = false, renderHealth = false, renderFields = false;
+    public static boolean renderHitboxes = false, renderServerPos = false, renderHealth = false;
     public static Vector2 serverPlayerPos = new Vector2();
     
 	private ShapeRenderer shapeRenderer;
@@ -62,9 +62,9 @@ public class RenderingSystem  {
     	}
     	
     	PositionComponent playerPos = gs.getPlayer().getPos();
-    	Camera.orthoCam.position.set(playerPos.getLerpX(frameTime), playerPos.getLerpY(frameTime), 0);
-    	Camera.orthoCam.update();
-    	batch.setProjectionMatrix(Camera.orthoCam.combined);
+    	Camera.smoothlyMoveTo(playerPos.getLerpX(frameTime), playerPos.getLerpY(frameTime));
+    	Camera.getCamera().update();
+    	batch.setProjectionMatrix(Camera.getCamera().combined);
     	
     	batch.begin();
     	map.render(batch);
@@ -84,48 +84,8 @@ public class RenderingSystem  {
         
         batch.end();
         
-        if(renderFields) {
-        	shapeRenderer.setProjectionMatrix(Camera.orthoCam.combined);
-	        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-	        
-	    	//Lower left
-	  		int startX = (int) ((Camera.orthoCam.position.x - Camera.orthoCam.viewportWidth / 2) / GameMap.TILE_SIZE);
-	  		if(startX < 0) startX = 0;
-	  		else if(startX >= map.getWidth()) startX = map.getWidth() - 1;
-	  		
-	  		int startY = (int) ((Camera.orthoCam.position.y - Camera.orthoCam.viewportHeight / 2) / GameMap.TILE_SIZE);
-	  		if(startY < 0) startY = 0;
-	  		else if(startY >= map.getHeight()) startY = map.getHeight() - 1;
-	  		
-	  		//Upper right
-	  		int endX = (int) (startX + Math.ceil(Camera.orthoCam.viewportWidth / GameMap.TILE_SIZE) + 1);
-	  		if(endX < 0) endX = 0;
-	  		else if(endX >= map.getWidth()) endX = map.getWidth() - 1;
-	  		int endY = (int) (startY + Math.ceil(Camera.orthoCam.viewportHeight / GameMap.TILE_SIZE) + 1);
-	  		if(endY < 0) endY = 0;
-	  		else if(endY >= map.getHeight()) endY = map.getHeight() - 1;
-	  		
-	  		for(int l = 0; l < GameMap.LAYERS; l++) {
-				for(int i = startX; i < endX; i++) {
-					for(int j = startY; j < endY; j++) {
-						if(map.getTile(i, j, l) != -1) {
-							int value = map.getMapField().getValue(i, j);
-							
-							if(value < 0)
-								shapeRenderer.setColor(Math.min(-value, 500) / 500f, 0, 0, 0.2f);
-							else
-								shapeRenderer.setColor(0, 0, Math.min(value, 500) / 500f, 0.2f);
-							
-							shapeRenderer.rect(i * GameMap.TILE_SIZE, j * GameMap.TILE_SIZE, GameMap.TILE_SIZE, GameMap.TILE_SIZE);
-						}
-					}
-				}
-			}
-	  		shapeRenderer.end();
-        }
-        
         if(renderHitboxes) {
-	        shapeRenderer.setProjectionMatrix(Camera.orthoCam.combined);
+	        shapeRenderer.setProjectionMatrix(Camera.getCamera().combined);
 	        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 	
 	        for (int i = 0; i < sortedEntities.size; ++i) {
@@ -182,10 +142,6 @@ public class RenderingSystem  {
 	        }
 	
 	        shapeRenderer.end();
-        }
-        
-        if(renderFields) {
-        	
         }
     }
 }

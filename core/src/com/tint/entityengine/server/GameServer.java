@@ -15,7 +15,6 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.tint.entityengine.GameMap;
 import com.tint.entityengine.entity.EntityGrid;
-import com.tint.entityengine.entity.FieldProcessor;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.network.packets.Packet;
 import com.tint.entityengine.server.ServerClient.ClientState;
@@ -31,7 +30,6 @@ public class GameServer {
 	private Engine engine;
 	private ServerListener serverListener;
 	private GameMap map;
-	private FieldProcessor fieldProcessor;
 	
 	private List<ServerClient> clients = new ArrayList<ServerClient>();
 
@@ -55,8 +53,6 @@ public class GameServer {
 		EntityGrid.init(engine);
 		
 		loadMap();
-		
-		fieldProcessor = new FieldProcessor(map);
 		
 		server.start();
 		try {
@@ -118,10 +114,6 @@ public class GameServer {
 	
 	public Server getServer() {
 		return server;
-	}
-	
-	public FieldProcessor getFieldProcessor() {
-		return fieldProcessor;
 	}
 
 	public void sendToAllConnectedUDP(Object object) {

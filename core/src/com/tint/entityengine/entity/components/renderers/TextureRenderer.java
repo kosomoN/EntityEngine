@@ -26,7 +26,7 @@ public class TextureRenderer implements Renderer {
 
 	@Override
 	public void render(SpriteBatch batch, Entity e, PositionComponent pos, float tickTime) {
-		batch.draw(texture, pos.getLerpX(tickTime) - offset.x, pos.getLerpY(tickTime) - offset.y);
+		batch.draw(texture, (int) (pos.getLerpX(tickTime) - offset.x), (int) (pos.getLerpY(tickTime) - offset.y));
 	}
 
 	@Override

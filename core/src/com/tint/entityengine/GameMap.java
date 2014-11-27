@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.tint.entityengine.entity.pathfinding.MapField;
 import com.tint.entityengine.network.packets.MapChunkPacket;
 
 public class GameMap {
@@ -17,8 +16,6 @@ public class GameMap {
 	private short[][][] tiles;
 	private short[] blockedIndexes; // Costal tiles: { 93, 94, 125, 126 } TODO Add more manually
 	private TextureRegion[] tileset;
-	
-	private MapField mapField;
 	
 	public GameMap(int width, int height, String tilesetPath) {
 		this.width = width;
@@ -49,25 +46,23 @@ public class GameMap {
 			}
 		}
 		blockedIndexes = new short[0];
-		
-		mapField = MapField.generate(this);
 	}
 	
 	public void render(SpriteBatch batch) {
 		//Lower left
-		int startX = (int) ((Camera.orthoCam.position.x - Camera.orthoCam.viewportWidth / 2) / TILE_SIZE);
+		int startX = (int) ((Camera.getCamera().position.x - Camera.getCamera().viewportWidth / 2) / TILE_SIZE);
 		if(startX < 0) startX = 0;
 		else if(startX >= width) startX = width - 1;
 		
-		int startY = (int) ((Camera.orthoCam.position.y - Camera.orthoCam.viewportHeight / 2) / TILE_SIZE);
+		int startY = (int) ((Camera.getCamera().position.y - Camera.getCamera().viewportHeight / 2) / TILE_SIZE);
 		if(startY < 0) startY = 0;
 		else if(startY >= height) startY = height - 1;
 		
 		//Upper right
-		int endX = (int) (startX + Math.ceil(Camera.orthoCam.viewportWidth / TILE_SIZE) + 1);
+		int endX = (int) (startX + Math.ceil(Camera.getCamera().viewportWidth / TILE_SIZE) + 1);
 		if(endX < 0) endX = 0;
 		else if(endX >= width) endX = width - 1;
-		int endY = (int) (startY + Math.ceil(Camera.orthoCam.viewportHeight / TILE_SIZE) + 1);
+		int endY = (int) (startY + Math.ceil(Camera.getCamera().viewportHeight / TILE_SIZE) + 1);
 		if(endY < 0) endY = 0;
 		else if(endY >= height) endY = height - 1;
 		
@@ -95,10 +90,6 @@ public class GameMap {
 	
 	public int getHeight() {
 		return width;
-	}
-	
-	public MapField getMapField() {
-		return mapField;
 	}
 	
 	public boolean isOnMap(float x, float y) {
