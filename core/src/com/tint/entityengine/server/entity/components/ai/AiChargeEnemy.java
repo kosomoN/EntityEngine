@@ -28,7 +28,7 @@ public class AiChargeEnemy implements AiController {
 		if(gameServer.getClients().size() == 0)
 			return;
 		
-		Entity chasePlayer = gameServer.getClients().get(0).getEntity();
+		Entity chasePlayer = getNearestPlayer();
 		PositionComponent playerPos = Mappers.position.get(chasePlayer);
 		
 		float dx = playerPos.getX() - position.getX();
@@ -64,6 +64,9 @@ public class AiChargeEnemy implements AiController {
 						float distY = position.getY() - otherPos.getY();
 						
 						float totalDist = (float) distX * distX + distY * distY;
+						// Division by 0 check
+						if(totalDist == 0) continue;
+						
 						distX /= totalDist;
 						distY /= totalDist;
 						
@@ -93,7 +96,7 @@ public class AiChargeEnemy implements AiController {
 		this.gameServer = gameServer;
 	}
 	
-	public Entity getNearestPlayerPosition() {
+	public Entity getNearestPlayer() {
 		Entity playerEntity = null;
 		float currentDxSq = Float.MAX_VALUE, currentDySq = Float.MAX_VALUE;
 		synchronized (gameServer.getClients()) {

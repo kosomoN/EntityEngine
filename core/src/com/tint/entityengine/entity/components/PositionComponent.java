@@ -11,13 +11,13 @@ public class PositionComponent extends Component implements Networked {
 	
 	private static float lerpTime = 3;
 	
-    private float x1, y1;
+    private float x1 = 0, y1 = 0;
     private transient int tick1;
     
-    private transient float x2, y2;
+    private transient float x2 = 0, y2 = 0;
     private transient int tick2;
     
-    private transient float x3, y3;
+    private transient float x3 = 0, y3 = 0;
     private transient int tick3;
     
 	private transient boolean hasChanged = true;

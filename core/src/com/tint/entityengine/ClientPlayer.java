@@ -1,7 +1,6 @@
 package com.tint.entityengine;
 
 import static com.tint.entityengine.server.entity.components.ServerPlayerComponent.*;
-
 import com.badlogic.ashley.core.Entity;
 import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.entity.components.renderers.PlayerRenderer;

@@ -14,6 +14,7 @@ import com.esotericsoftware.jsonbeans.JsonValue;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.minlog.Log;
 import com.tint.entityengine.server.entity.components.Initializable;
+import com.tint.entityengine.server.entity.systems.EntitySpawnSystem;
 
 public class EntityTemplateManager {
 	
@@ -54,7 +55,7 @@ public class EntityTemplateManager {
 				return name.endsWith(".json");
 			}
 		});
-    	
+		
     	Json json = new Json();
     	
     	for(int i = 0; i < files.length; i++) {
@@ -65,7 +66,8 @@ public class EntityTemplateManager {
     			JsonValue jsonValue = reader.parse(new File("server/entities/" + name));
     			
     			//Add full package declarations
-				addFullPackage(jsonValue.get("components"));
+				addFullPackage(jsonValue.get("components"), name.replace(".json", ""));
+				EntitySpawnSystem.registerEntityType(name.replace(".json", ""));
     			
     			//De-serialize
     			EntityTemplate template = json.fromJson(EntityTemplate.class, jsonValue.toString());
@@ -82,12 +84,12 @@ public class EntityTemplateManager {
     	Log.info(templates.values().size() + " entities loaded");
 	}
 	
-	private static void addFullPackage(JsonValue jsonValueArray) {
+	private static void addFullPackage(JsonValue jsonValueArray, String filename) {
 		for(JsonValue component : jsonValueArray) {
 			
 			//If a nested array was found, check it too
 			if(component.isObject() || component.isArray()) {
-				addFullPackage(component);
+				addFullPackage(component, filename);
 				continue;
 			}
 
@@ -101,6 +103,9 @@ public class EntityTemplateManager {
 					component.set(COMPONENT_PACKAGE + className);
 				} else if(className.startsWith("$SERVER")) {
 					component.set(SERVER_COMPONENT_PACKAGE + className.substring("$SERVER".length(), className.length()));
+					
+					if(className.contains("AiComponent"))
+						EntitySpawnSystem.registerEntityType("Enemy " + filename);
 				}
 			}
 		}

@@ -19,16 +19,21 @@ import com.tint.entityengine.entity.components.PositionComponent;
 import com.tint.entityengine.network.packets.Packet;
 import com.tint.entityengine.server.ServerClient.ClientState;
 import com.tint.entityengine.server.entity.systems.AiSystem;
+import com.tint.entityengine.server.entity.systems.EntitySpawnSystem;
 import com.tint.entityengine.server.entity.systems.ServerNetworkSystem;
 import com.tint.entityengine.server.entity.systems.ServerPlayerSystem;
 
 public class GameServer {
 
 	public static final float TICK_LENGTH = 1000000000.0f / 30.0f;
+	public static final int SECOND_LENGTH = Math.round(1 / TICK_LENGTH * 1000000000.0f); // rounding to avoid rounding errors with float
+	public static final int DAY_LENGTH = 15 * SECOND_LENGTH; // seconds * current ticks per sec
+	public static final int NIGHT_LENGTH = 15 * SECOND_LENGTH;
 
 	private Server server;
 	private Engine engine;
 	private ServerListener serverListener;
+	private EntitySpawnSystem entSpawnSystem;
 	private GameMap map;
 	
 	private List<ServerClient> clients = new ArrayList<ServerClient>();
@@ -42,12 +47,14 @@ public class GameServer {
 		server.getKryo().setRegistrationRequired(false);
 		
 		EntityTemplateManager.loadEntityTemplates(server.getKryo());
+		entSpawnSystem = new EntitySpawnSystem(this);
 		
 		engine = new Engine();
 		engine.addEntityListener(new ServerEntityListener(this));
 		engine.addSystem(new ServerPlayerSystem(this));
 		engine.addSystem(new ServerNetworkSystem(this));
 		engine.addSystem(new AiSystem(this));
+		engine.addSystem(entSpawnSystem);
 		//engine.addSystem(new ServerCollisionSystem());
 		
 		EntityGrid.init(engine);
@@ -98,6 +105,7 @@ public class GameServer {
 		if(e == null)
 			return false;
 		
+		System.out.println("entity spawned");
 		e.getComponent(PositionComponent.class).set(x, y, getTicks());
 		engine.addEntity(e);
 		

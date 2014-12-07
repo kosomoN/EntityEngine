@@ -86,6 +86,9 @@ public class ServerPlayerSystem extends IteratingSystem {
 			attack(entity, pos, pl.direction); //Will be replaced with weapons
 		else
 			hasAttacked = false;
+		
+		if(gameServer.getTicks() % GameServer.SECOND_LENGTH == 0)
+			Mappers.health.get(entity).addHp(1);
 
 		newX = testX;
 		newY = testY;
